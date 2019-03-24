@@ -1,0 +1,6 @@
+//USERS 
+ USR  merotrackusr    PASS    REDRIGAN    ROL identico al nombre
+ USR  mapusr          PASS    KHORRIGAN   ROL identico al nombre
+ USR  postgres        PASS    ALFARRIGAN
+ DB   mapdb
+ DB   merotrackingdb
