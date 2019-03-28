@@ -1,18 +1,15 @@
-const { Pool } = require('pg');
+const Sequelize = require('sequelize');
 const config = require("./configloader.js");
 
-const pool = new Pool({
-    database: config.database,
+const sequelize = new Sequelize(config.database, config.user, config.password, {
     host: config.host,
-    password: config.password,
-    user: config.user,
+    dialect: 'postgres',
     port: config.port,
-    max: config.max_pool,
-    min: config.min_pool,
-});
 
-module.exports = {
-    query : (text, params) => {
-        return pool.query(text, params)
+    pool: {
+        max: config.max_pool,
+        min: config.min_pool,
+        acquire: 30000,
+        idle: 10000
     }
-};
+});
