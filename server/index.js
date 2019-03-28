@@ -10,7 +10,10 @@ app.set("port", process.env.PORT || 3000);
 app.use(morgan("dev"));
 app.use(express.json());
 
-//Express server start
+//Route setup
+app.use('/trackapi/users',require('./route/user_routes'));
+
+//Start express server
 app.listen( app.get("port") , ()=>{
     console.log("Server listening");
 });
