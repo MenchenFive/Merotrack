@@ -7,8 +7,8 @@ const morgan = require("morgan"); // HTTP Request logger
 app.set("port", process.env.PORT || 3000);
 
 //Extras
-app.use(morgan("dev"));
 app.use(express.json());
+app.use(morgan('dev'));
 
 //Route setup
 app.use('/trackapi/users',require('./route/user_routes'));

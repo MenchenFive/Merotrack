@@ -1,19 +1,12 @@
 const db = require('../io/db');
 
+const User = require('../model/user');
+
 const dao = {};
 
-dao.getAll = (request,response) => {
-    response.json({
-        respuesta : {
-            saludo : "hola"
-        }
-    });
-
-    db.query("SELECT * FROM USERS",[])
-        .then(res => console.log('user:', res.rows[0]))
-        .catch(e => setImmediate(() => { throw e }))
-    
-}
+dao.getAll = User.findAll({
+    attributes: ['id','name','password']
+});
 
 dao.insert = function(){
     //Aqui meto usuarios

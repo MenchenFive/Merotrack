@@ -1,15 +1,33 @@
 const Sequelize = require('sequelize');
 const config = require("./configloader.js");
 
-const sequelize = new Sequelize(config.database, config.user, config.password, {
-    host: config.host,
+const sequelize = new Sequelize
+(
+    'merotrackerdb', 
+    'postgres', 
+    'ALFARRIGAN', 
+{
+    host: 'localhost',
     dialect: 'postgres',
-    port: config.port,
+    port:'5432',
 
     pool: {
-        max: config.max_pool,
-        min: config.min_pool,
-        acquire: 30000,
-        idle: 10000
+        max: 20,
+        min: 1,
+        idle: 10
     }
 });
+
+const operator = Sequelize.Op;
+
+sequelize.query('SELECT NOW();')
+    .then(([results, metadata]) => {
+        console.log(results);
+      })
+    .catch(console.log('patata'));
+
+module.exports = {
+    sequelize,
+    operator
+}
+

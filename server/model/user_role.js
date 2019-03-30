@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
 const { sequelize , operator } = require('../io/db.js');
 
-const User_role = require('./user_role.js');
 
-const User = sequelize.define( 'user' , {
+const User_role = sequelize.define( 'user_role' , {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -13,27 +12,23 @@ const User = sequelize.define( 'user' , {
     name: {
         type: Sequelize.STRING,
         allowNull: false,
-        validate: { 
-            len: [4,32]
+        validate : { 
+            len: [1,32]
         }
     },
-    email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: { 
-            isEmail: true,
-            len: [5,40]
-        }
-    },
-    pass: {
+    perm_users: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    salt: {
+    perm_vehicles: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    ref_role: {
+    perm_incidences: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    perm_trips: {
         type: Sequelize.STRING,
         allowNull: false
     }
@@ -41,5 +36,4 @@ const User = sequelize.define( 'user' , {
     timestamps: false
 });
 
-User.hasOne( User_role , { foreignKey: 'ref_role', targetKey: 'id', as: 'rol' } );
-module.exports = User;
+module.exports = User_role;
