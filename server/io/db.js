@@ -7,8 +7,9 @@ const sequelize = new Sequelize
     'postgres', 
     'ALFARRIGAN', 
 {
-    host: 'localhost',
+    host: '192.168.1.101',
     dialect: 'postgres',
+    protocol: 'postgres',
     port:'5432',
 
     pool: {

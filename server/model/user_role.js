@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { sequelize , operator } = require('../io/db.js');
 
 
-const User_role = sequelize.define( 'user_role' , {
+const User_role = sequelize.define( 'USER_ROLE' , {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

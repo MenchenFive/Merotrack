@@ -3,7 +3,7 @@ const { sequelize , operator } = require('../io/db.js');
 
 const User_role = require('./user_role.js');
 
-const User = sequelize.define( 'user' , {
+const User = sequelize.define( 'users' , {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -25,7 +25,7 @@ const User = sequelize.define( 'user' , {
             len: [5,40]
         }
     },
-    pass: {
+    password: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -41,5 +41,6 @@ const User = sequelize.define( 'user' , {
     timestamps: false
 });
 
-User.hasOne( User_role , { foreignKey: 'ref_role', targetKey: 'id', as: 'rol' } );
+User.hasOne( User_role );
+//User_role.belongsToMany( User,)
 module.exports = User;
