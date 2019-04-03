@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const dao = require('../controller/DAOUsers');
+
+const user = require('../model/users.js');
+const role = require('../model/user_roles.js');
 
 router.get('/', async (req,res) => {
     try {
-        let result = await dao.getAll();
-        res.json({result});
+        res.json( await user.findAll() );
+        res.json( "patata" );
     } catch (error) {
         console.log(error);
     }
