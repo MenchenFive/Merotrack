@@ -32,9 +32,26 @@ router.get('/', async (req,res) => {
     }
 });
 
-/*router.get('/:id', dao.get);
+router.get('/:id', async (req,res) => {
+    try {
+        let {id} = req.params;
 
-router.post('/', dao.insert);
+        let result = await user.findAll({where:{id:id}})//.map( (r) => (r.toJSON()));
+
+        /*for (let u of result) {
+            u.a = await role.findAll({where:{id:u.refRole}});
+        }*/
+
+        await addRoleToUser (result);
+
+        res.json( result );
+
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+/*router.post('/', dao.insert);
 
 router.put('/:id', dao.edit);
 
