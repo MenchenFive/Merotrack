@@ -21,12 +21,6 @@ const sequelize = new Sequelize
 
 const operator = Sequelize.Op;
 
-sequelize.query('SELECT NOW();')
-    .then(([results, metadata]) => {
-        console.log(results);
-      })
-    .catch(console.log('patata'));
-
 module.exports = {
     sequelize,
     operator
