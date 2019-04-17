@@ -15,6 +15,8 @@ app.use('/trackapi/users',require('./route/user_routes'));
 app.use('/trackapi/vehicles',require('./route/vehicle_routes'));
 app.use('/trackapi/user_roles',require('./route/user_roles_routes'));
 app.use('/trackapi/trips',require('./route/trips_routes'));
+app.use('/trackapi/vehicle_positions',require('./route/vehicle_positions'));
+
 
 //Start express server
 app.listen( app.get("port") , ()=>{
