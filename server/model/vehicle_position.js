@@ -23,8 +23,8 @@ const Vehicle_position = sequelize.define('vehiclePosition', {
       },
       field: 'ref_vehicle'
     },
-    position: {
-      type: "POINT",
+    geom: {
+      type: Sequelize.GEOMETRY('POINT'),
       allowNull: false,
       field: 'position'
     }

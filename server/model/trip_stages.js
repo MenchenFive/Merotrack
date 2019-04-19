@@ -33,15 +33,10 @@ const Stage = sequelize.define('tripStages', {
       },
       field: 'ref_trip'
     },
-    addressA: {
-      type: "POINT",
+    geom: {
+      type: Sequelize.GEOMETRY('POINT'),
       allowNull: false,
       field: 'address_a'
-    },
-    addressB: {
-      type: "POINT",
-      allowNull: false,
-      field: 'address_b'
     }
   }, {
     tableName: 'trip_stages',

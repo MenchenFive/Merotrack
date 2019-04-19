@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const position = require('../model/vehicle_position.js');
+const vehicle = require('../model/vehicles.js');
+const coordinateParser = require('coordinate-parser');
+const md5 = require('md5');
 
-const position = require('../model/vehicles.js');
+function addspace (input) {
+    let indexOfPoint = input.indexOf('.')-2;
+    return input.substr(0, indexOfPoint) + ' ' + input.substr(indexOfPoint);   
+};
 
 /*router.get('/', async (req,res) => {
     try {
@@ -48,11 +55,31 @@ const position = require('../model/vehicles.js');
 
 router.get('/', async (req,res) => {
     try {
-        let {latitude,longitude,altitude,time,satellites,speedOTG,course} = req.query;
+        let {latitude,longitude,time,satellites,speed,course,public,sum} = req.query;
         
-        console.log(latitude+","+longitude+","+altitude+","+time+","+satellites+","+speedOTG+","+course);
+        console.log(latitude+","+longitude+","+time+","+satellites+","+speed+","+course+","+public+","+sum);
 
-        res.json({result:"ok"});
+        let vehic = await vehicle.findOne( { where: { publicId: public } } );
+
+        if (md5(latitude+longitude+time+public+vehic.privateId) == sum){
+            let decPosition = new coordinateParser(addspace(latitude)+ " , " +addspace(longitude));
+
+            res.json({
+                result: "ok",
+                data: decPosition,
+                vehiclesdf: vehic
+            });
+
+        }else{
+            res.json( { 
+                result:"FAILED",
+                data: {},
+                message: 'Error al insertar posicion: hash invalido'
+            } );
+        }
+
+        
+        
         /*let newvehicle = await vehicle.create({
             brand,
             model,
@@ -81,7 +108,7 @@ router.get('/', async (req,res) => {
         res.json( { 
             result:"FAILED",
             data: {},
-            message: 'Error al insertar vehículo: '+error
+            message: 'Error al insertar posicion: '+error
         } );
         console.log(error);
     }
