@@ -14,7 +14,7 @@ const Vehicle_position = sequelize.define('vehiclePosition', {
       autoIncrement: true,
       field: 'id'
     },
-    refVehicle: {
+    ref_vehicle: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -23,10 +23,25 @@ const Vehicle_position = sequelize.define('vehiclePosition', {
       },
       field: 'ref_vehicle'
     },
-    geom: {
-      type: Sequelize.GEOMETRY('POINT'),
+    course: {
+      type: Sequelize.REAL,
       allowNull: false,
-      field: 'position'
+      field: 'course'
+    },
+    satellites: {
+      type: Sequelize.SMALLINT,
+      allowNull: false,
+      field: 'satellites'
+    },
+    speed: {
+      type: Sequelize.REAL,
+      allowNull: false,
+      field: 'speed'
+    },
+    geom: {
+      type: Sequelize.GEOMETRY('POINT',4326),
+      allowNull: false,
+      field: 'geom'
     }
   }, {
     tableName: 'vehicle_position',

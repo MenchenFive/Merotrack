@@ -4,6 +4,7 @@ const position = require('../model/vehicle_position.js');
 const vehicle = require('../model/vehicles.js');
 const coordinateParser = require('coordinate-parser');
 const md5 = require('md5');
+const dateFormat = require('dateformat');
 
 function addspace (input) {
     let indexOfPoint = input.indexOf('.')-2;
@@ -62,13 +63,40 @@ router.get('/', async (req,res) => {
         let vehic = await vehicle.findOne( { where: { publicId: public } } );
 
         if (md5(latitude+longitude+time+public+vehic.privateId) == sum){
+            
             let decPosition = new coordinateParser(addspace(latitude)+ " , " +addspace(longitude));
+            var geom = { 
+                type: 'Point', 
+                coordinates: [decPosition.longitude,decPosition.latitude],
+                crs: { type: 'name', properties: { name: 'EPSG:4326'} }
+            };
 
-            res.json({
-                result: "ok",
-                data: decPosition,
-                vehiclesdf: vehic
+            console.error(vehic.id);
+
+            let newPosition = await position.create({
+                date: dateFormat("yyyy-mm-dd HH:MM:ss"),
+                ref_vehicle: vehic.id,
+                course: course ? course : 0,
+                satellites: satellites ? satellites : 0,
+                speed: speed ? speed : 0,
+                geom
+            },{
+                fields: ["date","ref_vehicle","course","satellites","speed","geom"]
             });
+    
+            if (newPosition){
+                res.json( {
+                    result: "OK",
+                    data: newPosition,
+                    message: "vehículo introducido correctamente"
+                } );
+            }else{
+                res.json( { 
+                    result:"FAILED",
+                    data: {},
+                    message: "Error al insertar vehículo" 
+                } );
+            }
 
         }else{
             res.json( { 
