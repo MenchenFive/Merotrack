@@ -1,47 +1,37 @@
 package merotracker.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"vehicle"})
+@Table(name = "trips",schema = "public")
 public class Trips {
-    private int id;
-    private String description;
 
     @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
     @Column(name = "description", nullable = false, length = -1)
-    public String getDescription() {
-        return description;
-    }
+    private String description;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @ManyToOne(targetEntity = Vehicles.class)
+    @JoinColumn(name = "ref_vehicle")
+    private Vehicles vehicle;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Trips trips = (Trips) o;
-        return id == trips.id &&
-                Objects.equals(description, trips.description);
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip")
+    @JsonIgnore
+    private Set<TripStages> stages;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description);
-    }
 }

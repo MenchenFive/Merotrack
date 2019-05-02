@@ -1,82 +1,41 @@
 package merotracker.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.Objects;
+import java.util.Date;
 
 @Entity
-@Table(name = "trip_stages", schema = "public", catalog = "merotrackerdb")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"trip"})
+@Table(name = "trip_stages", schema = "public")
 public class TripStages {
-    private int id;
-    private Date dateA;
-    private String comments;
-    private Float lat;
-    private Float lon;
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
     @Column(name = "date_a", nullable = false)
-    public Date getDateA() {
-        return dateA;
-    }
+    @Temporal(TemporalType.DATE)
+    private Date dateA;
 
-    public void setDateA(Date dateA) {
-        this.dateA = dateA;
-    }
-
-    @Basic
     @Column(name = "comments", nullable = true, length = -1)
-    public String getComments() {
-        return comments;
-    }
+    private String comments;
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    @Basic
     @Column(name = "lat", nullable = true, precision = 0)
-    public Float getLat() {
-        return lat;
-    }
+    private Float lat;
 
-    public void setLat(Float lat) {
-        this.lat = lat;
-    }
-
-    @Basic
     @Column(name = "lon", nullable = true, precision = 0)
-    public Float getLon() {
-        return lon;
-    }
+    private Float lon;
 
-    public void setLon(Float lon) {
-        this.lon = lon;
-    }
+    @ManyToOne(targetEntity = Trips.class)
+    @JoinColumn(name = "ref_trip")
+    private Trips trip;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TripStages that = (TripStages) o;
-        return id == that.id &&
-                Objects.equals(dateA, that.dateA) &&
-                Objects.equals(comments, that.comments) &&
-                Objects.equals(lat, that.lat) &&
-                Objects.equals(lon, that.lon);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, dateA, comments, lat, lon);
-    }
 }

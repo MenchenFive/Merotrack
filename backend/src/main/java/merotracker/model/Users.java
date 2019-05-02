@@ -1,83 +1,39 @@
 package merotracker.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"refVehicle"})
 public class Users {
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String salt;
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
     @Column(name = "name", nullable = false, length = 32)
-    public String getName() {
-        return name;
-    }
+    private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
     @Column(name = "email", nullable = false, length = 40)
-    public String getEmail() {
-        return email;
-    }
+    private String email;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Basic
     @Column(name = "password", nullable = false, length = 32)
-    public String getPassword() {
-        return password;
-    }
+    private String password;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Basic
     @Column(name = "salt", nullable = false, length = 8)
-    public String getSalt() {
-        return salt;
-    }
+    private String salt;
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Users users = (Users) o;
-        return id == users.id &&
-                Objects.equals(name, users.name) &&
-                Objects.equals(email, users.email) &&
-                Objects.equals(password, users.password) &&
-                Objects.equals(salt, users.salt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, email, password, salt);
-    }
+    @ManyToOne(targetEntity = UserRoles.class)
+    @JoinColumn(name = "ref_role")
+    private UserRoles rol;
 }

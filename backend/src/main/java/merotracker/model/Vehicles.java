@@ -1,95 +1,53 @@
 package merotracker.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"refVehicle"})
+@Table(name = "vehicles", catalog = "public")
 public class Vehicles {
-    private String brand;
-    private String model;
-    private String plate;
-    private String publicId;
-    private String privateId;
-    private int id;
 
-    @Basic
     @Column(name = "brand", nullable = false, length = 32)
-    public String getBrand() {
-        return brand;
-    }
+    private String brand;
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    @Basic
     @Column(name = "model", nullable = false, length = 32)
-    public String getModel() {
-        return model;
-    }
+    private String model;
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    @Basic
     @Column(name = "plate", nullable = false, length = 7)
-    public String getPlate() {
-        return plate;
-    }
+    private String plate;
 
-    public void setPlate(String plate) {
-        this.plate = plate;
-    }
-
-    @Basic
     @Column(name = "public_id", nullable = false, length = 16)
-    public String getPublicId() {
-        return publicId;
-    }
+    private String publicId;
 
-    public void setPublicId(String publicId) {
-        this.publicId = publicId;
-    }
-
-    @Basic
     @Column(name = "private_id", nullable = false, length = 16)
-    public String getPrivateId() {
-        return privateId;
-    }
-
-    public void setPrivateId(String privateId) {
-        this.privateId = privateId;
-    }
+    private String privateId;
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
+    @JsonIgnore
+    private Set<Trips> trips;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vehicles vehicles = (Vehicles) o;
-        return id == vehicles.id &&
-                Objects.equals(brand, vehicles.brand) &&
-                Objects.equals(model, vehicles.model) &&
-                Objects.equals(plate, vehicles.plate) &&
-                Objects.equals(publicId, vehicles.publicId) &&
-                Objects.equals(privateId, vehicles.privateId);
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
+    @JsonIgnore
+    private Set<VehiclePosition> positions;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(brand, model, plate, publicId, privateId, id);
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
+    @JsonIgnore
+    private Set<VehicleIncidences> incidences;
+
 }

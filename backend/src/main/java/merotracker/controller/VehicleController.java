@@ -1,30 +1,18 @@
-package digital.alpinia.cvmanager.controller;
+package merotracker.controller;
 
-import digital.alpinia.cvmanager.model.Vehicle;
-import digital.alpinia.cvmanager.repository.VehicleRepository;
-import digital.alpinia.cvmanager.resource.VehicleResource;
-import digital.alpinia.cvmanager.service.VehicleService;
-import digital.alpinia.cvmanager.specification.VehicleSpecifications;
-import javassist.NotFoundException;
+import merotracker.model.Vehicles;
+import merotracker.service.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/person",produces = { "application/hal+json" })
+@RequestMapping(value = "/api/vehicles",produces = { "application/hal+json" })
 public class VehicleController {
 
     private final static Logger logger = LoggerFactory.getLogger(VehicleController.class);
@@ -32,7 +20,7 @@ public class VehicleController {
     @Autowired
     private VehicleService service;
 
-    @GetMapping("")
+   /* @GetMapping("")
     public ResponseEntity<PagedResources<VehicleResource>> getAll(@RequestParam int page, @RequestParam int size, PagedResourcesAssembler<Vehicle> assembler) {
 
         System.out.println(assembler.toString());
@@ -41,11 +29,11 @@ public class VehicleController {
 
         return ResponseEntity.ok().body(resultPage);
 
-    }
+    }*/
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vehicle> getById(@PathVariable(value = "id") Integer personId) {
-        return ResponseEntity.ok().body(service.findById(personId));
+    public ResponseEntity<Vehicles> getById(@PathVariable(value = "id") Integer vehicleId) {
+        return ResponseEntity.ok().body(service.findById(vehicleId));
     }
 
    /* @GetMapping("with")
