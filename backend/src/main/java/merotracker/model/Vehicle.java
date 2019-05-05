@@ -1,20 +1,21 @@
 package merotracker.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"refVehicle"})
+@EqualsAndHashCode(exclude = {"incidences","positions","trips"})
+@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 @Table(name = "vehicles", catalog = "public")
 public class Vehicles {
 
