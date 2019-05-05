@@ -1,5 +1,6 @@
 package merotracker.controller;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import merotracker.model.Vehicle;
 import merotracker.model.VehiclePosition;
 import merotracker.repository.VehiclePositionRepository;
@@ -21,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,8 +54,8 @@ public class VehiclePositionController {
 
     // example: ?latitude=3859.795314&longitude=-355.488458&altitude=689&time=20190504230523&satellites=14&speedOTG=&course=335.180481&vehicle=OraP37mHQ6SX4ZQP&sum=fbc2a37cf2bb19ef8c6d739682de7a4a
     // hash: lat, lon, date, public, private
-    @PostMapping("")
-    public ResponseEntity create (
+    @GetMapping("/arduino")
+    public ResponseEntity<?> create (
 
             @RequestParam String latitude,
             @RequestParam String longitude,
@@ -65,9 +67,13 @@ public class VehiclePositionController {
             @RequestParam String vehicle,
             @RequestParam String sum
 
-    ) throws NoSuchAlgorithmException, ParseException {
+    ) throws NoSuchAlgorithmException, ParseException, InvalidArgumentException {
 
         Vehicle v = vehicleRepository.findByPublicId(vehicle).orElseThrow(() -> new EntityNotFoundException());
+
+        if (Double.parseDouble(latitude) == 0 && Double.parseDouble(latitude) == 0 )
+            throw new InvalidArgumentException(new String[]{"Invalid Coordinates"});
+
 
         String toCheck = latitude+longitude+time+v.getPublicId()+v.getPrivateId();
         byte[] bytesOfMessage = toCheck.getBytes(StandardCharsets.UTF_8);
@@ -77,14 +83,12 @@ public class VehiclePositionController {
             sb.append(String.format("%02x", b));
         String sumGenerated = sb.toString();
 
-
-
-
         if ( sumGenerated.equals(sum) ){
             DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date parsed = df.parse(time);
 
             VehiclePosition vp = new VehiclePosition(
-                    df.parse(String.valueOf(time)),
+                    parsed,
                     -1,
                     (course.equals("")?null:Double.parseDouble(course)),
                     Short.parseShort(satellites),
@@ -100,7 +104,7 @@ public class VehiclePositionController {
             logger.warn("UNEXPECTED ATTEMPT AT VEHICLE POSITION CREATION");
         }
 
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok().body("\n\t Data Save\n");
 
     }
 

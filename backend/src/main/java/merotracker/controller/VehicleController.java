@@ -3,6 +3,7 @@ package merotracker.controller;
 import merotracker.model.Vehicle;
 import merotracker.repository.VehicleRepository;
 import net.bytebuddy.utility.RandomString;
+import org.hibernate.validator.engine.HibernateConstraintViolation;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

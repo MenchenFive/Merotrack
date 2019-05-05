@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"incidences","positions","trips"})
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-@Table(name = "vehicles", catalog = "public")
+@Table(name = "vehicles", catalog = "public" )
 public class Vehicle {
 
     @Column(name = "brand", nullable = false, length = 32)

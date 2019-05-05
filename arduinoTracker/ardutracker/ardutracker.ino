@@ -16,9 +16,9 @@ char pin[]          = "613408";
 char apn[]          = "airtelwap.es";
 char user_name[]    = "wap@wap";
 char password[]     = "wap125";
-char url[]          = "merotracker.duckdns.org:3000/trackapi/vehicle_positions";
-char publichash[]   = "OraP37mHQ6SX4ZQP";
-char privatehash[]  = "KXnkPUSbyvkmYz22";
+char url[]          = "http://92.58.189.46:3000/api/positions/arduino";
+char publichash[]   = "2fLx0CbqRpYwPQ4Y";
+char privatehash[]  = "dBvINo3tEKWW4swW";
 
 char latitude[15];
 char longitude[15];
@@ -36,7 +36,7 @@ char aux_str[100];
 char aux;
 int x = 0;
 char N_S,W_E;
-char frame[200];
+char frame[300];
 char *md5str;
 
 
@@ -45,6 +45,9 @@ void setup(){
     pinMode(3,OUTPUT);
     pinMode(4,OUTPUT);
     pinMode(5,OUTPUT);
+    pinMode(13,OUTPUT);
+
+    digitalWrite(13,LOW);
     
     digitalWrite(5,HIGH);
     delay(1500);
@@ -55,57 +58,83 @@ void setup(){
     digitalWrite(3,LOW);//enable GSM
     digitalWrite(4,HIGH);//disable GPS
     
-    delay(3000);
+    delay(2000);
 
-    Serial.println("Starting...");
     power_on();
 
-    delay(3000);
+    delay(2000);
 
     //sets the PIN code
-    //snprintf(aux_str, sizeof(aux_str), "AT+CPIN=%s", pin);
-    //sendATcommand(aux_str, "OK", 2000);
+    snprintf(aux_str, sizeof(aux_str), "AT+CPIN=%s", pin);
+    sendATcommand(aux_str, "OK", 2000);
 
-    delay(3000);
-    
-    // starts the GPS and waits for signal
-    //while ( start_GPS() == 0);
-    start_GPS();
-    
-    //while (sendATcommand("AT+CREG?", "+CREG: 0,1", 2000) == 0);
+    delay(2000);
 
-    // sets APN , user name and password
+    while (sendATcommand("AT+CREG?", "+CREG: 0,1", 2000) == 0);
+
+    delay(2000);
+    
+    snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"APN\",\"%s\"", apn);
+    sendATcommand(aux_str, "OK", 2000);
+    
+    delay(2000);
+    
+    snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"USER\",\"%s\"", user_name);
+    sendATcommand(aux_str, "OK", 2000);
+    
+    delay(2000);
+    
+    snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"PWD\",\"%s\"", password);
+    sendATcommand(aux_str, "OK", 2000);
+    
+    delay(2000);
+
     sendATcommand("AT+SAPBR=3,1,\"Contype\",\"GPRS\"", "OK", 2000);
-    //snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"APN\",\"%s\"", apn);
-    //sendATcommand(aux_str, "OK", 2000);
-    
-    //snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"USER\",\"%s\"", user_name);
-    //sendATcommand(aux_str, "OK", 2000);
-    
-    //snprintf(aux_str, sizeof(aux_str), "AT+SAPBR=3,1,\"PWD\",\"%s\"", password);
-    //sendATcommand(aux_str, "OK", 2000);
+
+    delay(2000);
 
     // gets the GPRS bearer
-    //while (sendATcommand("AT+SAPBR=1,1", "OK", 20000) == 0)
+    while (sendATcommand("AT+SAPBR=1,1", "OK", 20000) == 0)
     {
-        delay(5000);
+        delay(2000);
     }
+
+    sendATcommand("AT+HTTPINIT", "OK", 10000);
+
+    delay(2000);
+
+    sendATcommand("AT+HTTPPARA=\"CID\",1", "OK", 5000);
+
+    delay(5000);
+
+    sendATcommand("AT+CGPSIPR=9600", "OK", 2000);
+
+    delay(2000);
+    
+    sendATcommand("AT+CGPSPWR=1", "OK", 2000);
+
+    delay(2000);
+    
+    sendATcommand("AT+CGPSRST=0", "OK", 2000);
+
+    delay(2000);
+    
+    start_GPS();
+
+    delay(2000);
+ 
+    digitalWrite(13,HIGH);
 
 }
 
 void loop()
 {
     get_GPS();
-    
-    //send_HTTP();
-    
-    generatehash();
-    
-    sprintf(frame, "?latitude=%s&longitude=%s&altitude=%s&time=%s&satellites=0%s&speedOTG=0%s&course=0%s&vehicle=%s&sum=%s",
-            latitude, longitude, altitude, date, satellites, speedOTG, course, publichash, aux_str);
-            Serial.println(frame);
-            
 
+    delay(3000);
+    
+    send_HTTP();
+            
     delay(5000);
 }
 
@@ -133,14 +162,8 @@ void power_on(){
 }
 
 int8_t start_GPS(){
-    
-    sendATcommand("AT+CGPSIPR=9600", "OK", 2000);
-    sendATcommand("AT+CGPSPWR=1", "OK", 2000);
-    sendATcommand("AT+CGPSRST=0", "OK", 2000);
-
     while(( (sendATcommand("AT+CGPSSTATUS?", "2D Fix", 5000) || 
         sendATcommand("AT+CGPSSTATUS?", "3D Fix", 5000)) == 0 ));
-
 }
 
 int8_t get_GPS(){
@@ -189,51 +212,14 @@ int8_t get_GPS(){
 }
 
 void send_HTTP(){
-    
-    answer = sendATcommand("AT+HTTPINIT", "OK", 10000);
-    if (answer == 1)
-    {
-        answer = sendATcommand("AT+HTTPPARA=\"CID\",1", "OK", 5000);
-        if (answer == 1)
-        {
-            // Sets url 
             sprintf(aux_str, "AT+HTTPPARA=\"URL\",\"%s", url);
             Serial.print(aux_str);
-            generatehash();
-            sprintf(frame, "?latitude=%s&longitude=%s&altitude=%s&time=%s&satellites=%s&speed=%s&course=%s&vehicle=%s&sum=%s",
-            latitude, longitude, altitude, date, satellites, speedOTG, course, publichash, aux_str);
+            sprintf(frame, "?visor=false&latitude=%s&longitude=%s&altitude=%s&time=%s&satellites=%s&speedOTG=%s&course=%s\0",
+            latitude, longitude, altitude, date, satellites, speedOTG, course);
             Serial.print(frame);
-            answer = sendATcommand("\"", "OK", 5000);
-            if (answer == 1)
-            {
-                answer = sendATcommand("AT+HTTPACTION=0", "+HTTPACTION:0,200", 30000); //HTTPACTION 0=GET, 1=POST, 2=HEAD
-                if (answer == 1)
-                {
-                    Serial.println(F("Done!"));
-                }
-                else
-                {
-                    Serial.println(F("Error getting url"));
-                }
-
-            }
-            else
-            {
-                Serial.println(F("Error setting the url"));
-            }
-        }
-        else
-        {
-            Serial.println(F("Error setting the CID"));
-        }    
-    }
-    else
-    {
-        Serial.println(F("Error initializating"));
-    }
-
-    sendATcommand("AT+HTTPTERM", "OK", 5000);
-    
+            sendATcommand("\"", "OK", 5000);
+            sendATcommand("AT+HTTPACTION=0", "+HTTPACTION:0,200", 30000);
+            delay(5000);
 }
 
 
@@ -243,28 +229,30 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer1, unsigned int timeo
     char response[100];
     unsigned long previous;
 
-    memset(response, '\0', 100);    
+    memset(response, '\0', 100);    // Initialize the string
 
     delay(100);
 
-    while( Serial.available() > 0) Serial.read();    
+    while( Serial.available() > 0) Serial.read();    // Clean the input buffer
 
-    Serial.println(ATcommand);    
+    Serial.println(ATcommand);    // Send the AT command 
 
-    x = 0;
+
+        x = 0;
     previous = millis();
 
+    // this loop waits for the answer
     do{
         if(Serial.available() != 0){    
             response[x] = Serial.read();
             x++;
-            
+            // check if the desired answer is in the response of the module
             if (strstr(response, expected_answer1) != NULL)    
             {
                 answer = 1;
             }
         }
-        
+        // Waits for the asnwer with time out
     }
     while((answer == 0) && ((millis() - previous) < timeout));    
 

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ import java.util.Date;
 @EqualsAndHashCode(exclude = {"vehicle"})
 public class VehiclePosition {
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date", nullable = false)
     private Date date;
 
