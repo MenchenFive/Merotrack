@@ -10,13 +10,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "vehicle_incidences", schema = "public")
+@Table(name = "vehicleincidences", schema = "public")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"vehicle"})
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class VehicleIncidences {
+public class VehicleIncidence {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -26,7 +26,7 @@ public class VehicleIncidences {
     @Column(name = "title", nullable = false, length = 80)
     private String title;
 
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true, length = 127)
     private String description;
 
     @Temporal(TemporalType.DATE)
@@ -37,8 +37,8 @@ public class VehicleIncidences {
     @Column(name = "date_end", nullable = true)
     private Date dateEnd;
 
-    @ManyToOne(targetEntity = Vehicles.class)
+    @ManyToOne(targetEntity = Vehicle.class)
     @JoinColumn(name = "ref_vehicle")
-    private Vehicles vehicle;
+    private Vehicle vehicle;
 
 }

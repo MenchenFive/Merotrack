@@ -17,22 +17,22 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"vehicle"})
 @Table(name = "trips",schema = "public")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class Trips {
+public class Trip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "description", nullable = false, length = -1)
+    @Column(name = "description", nullable = false, length = 127)
     private String description;
 
-    @ManyToOne(targetEntity = Vehicles.class)
+    @ManyToOne(targetEntity = Vehicle.class)
     @JoinColumn(name = "ref_vehicle")
-    private Vehicles vehicle;
+    private Vehicle vehicle;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip")
     @JsonIgnore
-    private Set<TripStages> stages;
+    private Set<TripStage> stages;
 
 }

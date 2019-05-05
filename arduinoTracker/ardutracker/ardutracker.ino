@@ -17,8 +17,8 @@ char apn[]          = "airtelwap.es";
 char user_name[]    = "wap@wap";
 char password[]     = "wap125";
 char url[]          = "merotracker.duckdns.org:3000/trackapi/vehicle_positions";
-char publichash[]   = "SZQ93Yds1d97NWtC";
-char privatehash[]  = "jsxcEXRziTrvMczr";
+char publichash[]   = "OraP37mHQ6SX4ZQP";
+char privatehash[]  = "KXnkPUSbyvkmYz22";
 
 char latitude[15];
 char longitude[15];
@@ -101,7 +101,7 @@ void loop()
     
     generatehash();
     
-    sprintf(frame, "?latitude=%s&longitude=%s&altitude=%s&time=%s&satellites=%s&speedOTG=%s&course=%s&vehicle=%s&sum=%s",
+    sprintf(frame, "?latitude=%s&longitude=%s&altitude=%s&time=%s&satellites=0%s&speedOTG=0%s&course=0%s&vehicle=%s&sum=%s",
             latitude, longitude, altitude, date, satellites, speedOTG, course, publichash, aux_str);
             Serial.println(frame);
             

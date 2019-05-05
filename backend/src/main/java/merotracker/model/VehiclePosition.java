@@ -1,5 +1,6 @@
 package merotracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
-@Table(name = "vehicle_position", schema = "public")
+@Table(name = "vehiclepositions", schema = "public")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 @EqualsAndHashCode(exclude = {"vehicle"})
 public class VehiclePosition {
 
@@ -27,22 +28,22 @@ public class VehiclePosition {
     private long id;
 
     @Column(name = "course", nullable = true, precision = 0)
-    private Float course;
+    private double course;
 
     @Column(name = "satellites", nullable = true, precision = 0)
     private Short satellites;
 
     @Column(name = "speed", nullable = true, precision = 0)
-    private Float speed;
+    private double speed;
 
     @Column(name = "lat", nullable = true, precision = 0)
-    private Float lat;
+    private double lat;
 
     @Column(name = "lon", nullable = true, precision = 0)
-    private Float lon;
+    private double lon;
 
-    @ManyToOne(targetEntity = Vehicles.class)
+    @ManyToOne(targetEntity = Vehicle.class)
     @JoinColumn(name = "ref_vehicle")
-    private Vehicles vehicle;
+    private Vehicle vehicle;
 
 }

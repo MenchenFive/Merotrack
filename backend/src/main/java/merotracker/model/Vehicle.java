@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"incidences","positions","trips"})
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 @Table(name = "vehicles", catalog = "public")
-public class Vehicles {
+public class Vehicle {
 
     @Column(name = "brand", nullable = false, length = 32)
     private String brand;
@@ -41,7 +41,7 @@ public class Vehicles {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
     @JsonIgnore
-    private Set<Trips> trips;
+    private Set<Trip> trips;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
     @JsonIgnore
@@ -49,6 +49,6 @@ public class Vehicles {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
     @JsonIgnore
-    private Set<VehicleIncidences> incidences;
+    private Set<VehicleIncidence> incidences;
 
 }

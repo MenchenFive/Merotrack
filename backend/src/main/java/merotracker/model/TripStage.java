@@ -14,9 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"trip"})
-@Table(name = "trip_stages", schema = "public")
+@Table(name = "tripstages", schema = "public")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class TripStages {
+public class TripStage {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -27,7 +27,7 @@ public class TripStages {
     @Temporal(TemporalType.DATE)
     private Date dateA;
 
-    @Column(name = "comments", nullable = true, length = -1)
+    @Column(name = "comments", nullable = true, length = 127)
     private String comments;
 
     @Column(name = "lat", nullable = true, precision = 0)
@@ -36,8 +36,8 @@ public class TripStages {
     @Column(name = "lon", nullable = true, precision = 0)
     private Float lon;
 
-    @ManyToOne(targetEntity = Trips.class)
+    @ManyToOne(targetEntity = Trip.class)
     @JoinColumn(name = "ref_trip")
-    private Trips trip;
+    private Trip trip;
 
 }

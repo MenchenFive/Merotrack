@@ -15,9 +15,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"user"})
-@Table(name = "user_roles", schema = "public")
+@Table(name = "userroles", schema = "public")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class UserRoles {
+public class UserRole {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -41,6 +41,6 @@ public class UserRoles {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rol")
     @JsonIgnore
-    private Set<Users> user;
+    private Set<User> user;
 
 }

@@ -13,8 +13,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"rol"})
+@Table(name = "users", schema = "public")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class Users {
+public class User {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -33,7 +34,7 @@ public class Users {
     @Column(name = "salt", nullable = false, length = 8)
     private String salt;
 
-    @ManyToOne(targetEntity = UserRoles.class)
+    @ManyToOne(targetEntity = UserRole.class)
     @JoinColumn(name = "ref_role")
-    private UserRoles rol;
+    private UserRole rol;
 }

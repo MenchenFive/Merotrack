@@ -10,14 +10,4 @@ public class MerotrackerApplication {
 		SpringApplication.run(MerotrackerApplication.class, args);
 	}
 
-	/*@Bean
-	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-		ObjectMapper objectMapper = jsonConverter.getObjectMapper();
-		objectMapper.registerModule(new Hibernate5Module());
-
-		return jsonConverter;
-	}*/
-
-
 }
