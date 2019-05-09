@@ -1,6 +1,5 @@
 package merotracker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"trip"})
 @Table(name = "tripstages", schema = "public")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class TripStage {
 
     @Id

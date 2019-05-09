@@ -1,7 +1,6 @@
 package merotracker.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +15,6 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"user"})
 @Table(name = "userroles", schema = "public")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class UserRole {
 
     @Id

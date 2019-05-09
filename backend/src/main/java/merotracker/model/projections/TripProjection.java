@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import merotracker.model.Vehicle;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -17,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"vehicle"})
 @Table(name = "trips",schema = "public")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class Trip {
+public class TripProjection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,5 @@
 package merotracker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,15 +39,12 @@ public class Vehicle {
     private int id;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
-    @JsonIgnore
     private Set<Trip> trips;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
-    @JsonIgnore
     private Set<VehiclePosition> positions;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
-    @JsonIgnore
     private Set<VehicleIncidence> incidences;
 
 }

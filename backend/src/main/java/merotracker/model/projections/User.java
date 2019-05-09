@@ -1,4 +1,4 @@
-package merotracker.model;
+package merotracker.model.projections;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

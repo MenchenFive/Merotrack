@@ -1,4 +1,4 @@
-package merotracker.model;
+package merotracker.model.projections;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -36,8 +36,8 @@ public class TripStage {
     @Column(name = "lon", nullable = true, precision = 0)
     private Float lon;
 
-    @ManyToOne(targetEntity = Trip.class)
+    @ManyToOne(targetEntity = TripProjection.class)
     @JoinColumn(name = "ref_trip")
-    private Trip trip;
+    private TripProjection trip;
 
 }

@@ -5,35 +5,27 @@ import merotracker.model.Vehicle;
 import merotracker.model.VehiclePosition;
 import merotracker.repository.VehiclePositionRepository;
 import merotracker.repository.VehicleRepository;
-import net.bytebuddy.utility.RandomString;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.*;
-import sun.security.provider.MD5;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
-@RestController
-@RequestMapping(value = "/api/positions",produces = { "application/hal+json" })
+@RepositoryRestController
+@RequestMapping(value = "/vehiclepositions")
 public class VehiclePositionController {
 
     private final static Logger logger = LoggerFactory.getLogger(VehiclePositionController.class);
@@ -42,16 +34,6 @@ public class VehiclePositionController {
     private VehiclePositionRepository repository;
     @Autowired
     private VehicleRepository vehicleRepository;
-
-    @GetMapping("")
-    public ResponseEntity<?> getAll(Pageable pageable) {
-        return ResponseEntity.ok().body(repository.findAll(pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable(value = "id") Integer id) {
-        return ResponseEntity.ok().body(repository.findById(id).orElse(null));
-    }
 
     // example: ?latitude=3859.795314&longitude=-355.488458&altitude=689&time=20190504230523&satellites=14&speedOTG=&course=335.180481&vehicle=OraP37mHQ6SX4ZQP&sum=fbc2a37cf2bb19ef8c6d739682de7a4a
     // hash: lat, lon, date, public, private
@@ -69,6 +51,8 @@ public class VehiclePositionController {
             @RequestParam String sum
 
     ) throws NoSuchAlgorithmException, ParseException, InvalidArgumentException {
+
+        System.out.println("ping!");
 
         Vehicle v = vehicleRepository.findByPublicId(vehicle).orElseThrow(() -> new EntityNotFoundException());
 

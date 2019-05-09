@@ -1,4 +1,4 @@
-package merotracker.model;
+package merotracker.model.projections;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
