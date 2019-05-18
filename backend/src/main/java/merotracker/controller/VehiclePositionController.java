@@ -25,7 +25,6 @@ import java.util.Date;
 
 
 @RepositoryRestController
-@RequestMapping(value = "/vehiclepositions")
 public class VehiclePositionController {
 
     private final static Logger logger = LoggerFactory.getLogger(VehiclePositionController.class);
@@ -37,7 +36,7 @@ public class VehiclePositionController {
 
     // example: ?latitude=3859.795314&longitude=-355.488458&altitude=689&time=20190504230523&satellites=14&speedOTG=&course=335.180481&vehicle=OraP37mHQ6SX4ZQP&sum=fbc2a37cf2bb19ef8c6d739682de7a4a
     // hash: lat, lon, date, public, private
-    @GetMapping("/arduino")
+    @GetMapping("/vehiclepositions/arduino")
     public ResponseEntity<?> create (
 
             @RequestParam String latitude,
