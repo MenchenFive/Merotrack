@@ -3,11 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { VehicleTableComponent } from './vehicles/vehicletable.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
+    {
+      path: 'vehicles',
+      component: VehicleTableComponent,
+    },
     {
       path: 'dashboard',
       component: DashboardComponent,

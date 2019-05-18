@@ -5,6 +5,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { VehicleTableComponent } from './vehicles/vehicletable.component';
+import { VehicleTableModule } from './vehicles/vehicletable.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -16,6 +18,7 @@ const PAGES_COMPONENTS = [
     ThemeModule,
     DashboardModule,
     MiscellaneousModule,
+    VehicleTableModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Vehiculos',
     icon: 'nb-home',
-    link: '/pages/dashboard',
+    link: '/pages/vehicles',
     home: true,
   },
   {
