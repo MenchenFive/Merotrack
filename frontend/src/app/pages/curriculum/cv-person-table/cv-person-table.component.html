@@ -1,0 +1,12 @@
+<nb-card>
+    <nb-card-body>
+        <ng2-smart-table
+            [settings]="settings"
+            [source]="source"
+            (edit)="onEdit($event)"
+            (deleteConfirm)="onDeleteConfirm($event)"
+            (userRowSelect)="onClick($event)"
+            (create)="onAdd($event)">
+        </ng2-smart-table>
+    </nb-card-body>
+</nb-card>

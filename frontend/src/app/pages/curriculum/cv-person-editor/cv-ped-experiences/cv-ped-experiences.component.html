@@ -1,0 +1,62 @@
+<div class="container">
+
+<form *ngIf="mode!=modes.View" #peForm="ngForm" (ngSubmit)="(peForm.valid) ? [onSubmit(peForm.value),peForm.resetForm()] : null">
+
+  <div class=row>
+  <div class="col-sm-4 my-3">
+    <input type="text" #peRole="ngModel" nbInput minlength=2 maxlength=80 required placeholder="Role" [(ngModel)]="currentPe.role" name="role" class="form-control " [ngClass]="{'form-control-danger': peRole.invalid && (peRole.dirty || peRole.touched || peForm.submitted)}">
+  </div>
+  <div class="col-sm-8 my-3">
+    <input type="text" #peDescr="ngModel" nbInput maxlength=150 placeholder="Description" [(ngModel)]="currentPe.description" name="description" class="form-control" [ngClass]="{'form-control-danger': peDescr.invalid && (peDescr.dirty || peDescr.touched || peForm.submitted)}">
+  </div>
+  </div>
+
+  <div class="row">
+  <div class="col-sm-2 my-3">
+    <input name="datestart" class="form-control " nbInput placeholder="From" [nbDatepicker]="pickerStart" [(ngModel)]="currentPe.dateStart" #peDateStart="ngModel" [ngClass]="{'form-control-danger': peDateStart.invalid && (peDateStart.dirty || peDateStart.touched || peForm.submitted)}">
+  </div>
+  <div class="col-sm-2 my-3">
+    <input name="dateend" class="form-control" nbInput placeholder="To" [nbDatepicker]="pickerEnd" [(ngModel)]="currentPe.dateEnd" #peDateEnd="ngModel" [ngClass]="{'form-control-danger': peDateEnd.invalid && (peDateEnd.dirty || peDateEnd.touched || peForm.submitted)}">
+  </div>
+  <div class="col-sm-4 my-3"><p-autoComplete
+    required
+    #peAutocompleter="ngModel"
+    [forceSelection]="true"
+    class="col-sm-3"
+    name="company"
+    [(ngModel)]="currentPe.company"
+    [suggestions]="companyResults | async"
+    (completeMethod)="search($event)"
+    field="name"
+    placeholder="Company"
+    [inputStyleClass]="(peAutocompleter.invalid && (peAutocompleter.dirty || peAutocompleter.touched || peForm.submitted)) ? 'form-control-danger form-control' : 'form-control' "
+  ></p-autoComplete></div>
+  <div class="col-sm-2 my-3">
+    <button type=submit class="btn btn-primary w-100" nbButton shape="rectangle">{{(currentPe.id)?'Edit':'Add'}}</button>
+    </div>
+  <div class="col-sm-2 my-3">
+    <button type=reset *ngIf="currentPeEdit" class="btn btn-secondary w-100" (click)="onButtonCancel($event); peForm.resetForm()" nbButton shape="rectangle">Cancel Edit</button>
+  </div>
+  </div>
+
+  <nb-datepicker #pickerStart [max]="(currentPe.dateEnd)?currentPe.dateEnd:today" ></nb-datepicker>
+  <nb-datepicker #pickerEnd   [max]="today" [min]="(currentPe.dateStart)?currentPe.dateStart:null" ></nb-datepicker>
+
+</form>
+
+<!--format="dd/MM/yyyy"
+-->
+
+<br>
+
+<div class="row my-3">
+<div class="col-sm-12">
+<ng2-smart-table
+  [settings]="settings"
+  [source]="source"
+  (edit)=onEditTable($event)
+></ng2-smart-table>
+</div>
+</div>
+
+</div>
