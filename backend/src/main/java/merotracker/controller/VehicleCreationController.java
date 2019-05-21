@@ -1,8 +1,6 @@
 package merotracker.controller;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import merotracker.model.Vehicle;
-import merotracker.model.VehiclePosition;
 import merotracker.repository.VehiclePositionRepository;
 import merotracker.repository.VehicleRepository;
 import org.slf4j.Logger;
@@ -10,16 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.EntityNotFoundException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 

@@ -5,39 +5,34 @@ import { SpringDataSource } from '../SpringDataSource';
 import { ExternalConfigurationService } from '../../ExternalConfigurationService';
 import { PersonExperience } from './person-experiences';
 import { DocumentType } from './document-type';
+import { PersonQualification } from './person-qualification';
+import { PersonKnowledge } from './person-knowledges';
+import { PersonLanguage } from './person-languages';
 
 const urlRoute = 'people';
 
 export class Person extends Resource {
 
-  /*public id:                 number | null;
-  public name:               string | null;
-  public surname1:           string | null;
-  public surname2:           string | null;
-  public document:           string | null;
-  public phone1:             string | null;
-  public phone2:             string | null;
-  public address:            string | null;
-  public email:              string | null;
-  public personExperiences:  PersonExperience[] | null;*/
-
   constructor(
-    public id?:                 number,
-    public name?:               string,
-    public surname1?:           string,
-    public surname2?:           string,
-    public document?:           string,
-    public documentType?:       DocumentType,
-    public phone1?:             string,
-    public phone2?:             string,
-    public address?:            string,
-    public email?:              string,
-    public personExperiences?:  PersonExperience[],
+    public id?:                     number,
+    public name?:                   string,
+    public surname1?:               string,
+    public surname2?:               string,
+    public document?:               string,
+    public documentType?:           DocumentType,
+    public phone1?:                 string,
+    public phone2?:                 string,
+    public address?:                string,
+    public email?:                  string,
+    public personExperiences?:      PersonExperience[],
+    public personQualifications?:   PersonQualification[],
+    public personKnowledges?:       PersonKnowledge[],
+    public personLanguages?:        PersonLanguage[],
   )
   { super(); }
 
   public static newNull(): Person {
-    return new Person(null,null,null,null,null,null,null,null,null,null,[]);
+    return new Person(null, null, null, null, null, null, null, null, null, null, [], [], [], []);
   }
 
 

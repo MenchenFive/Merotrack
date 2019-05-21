@@ -1,6 +1,5 @@
 package merotracker.controller;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import merotracker.model.Vehicle;
 import merotracker.model.VehiclePosition;
 import merotracker.repository.VehiclePositionRepository;
@@ -11,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -49,14 +48,14 @@ public class VehiclePositionController {
             @RequestParam String vehicle,
             @RequestParam String sum
 
-    ) throws NoSuchAlgorithmException, ParseException, InvalidArgumentException {
+    ) throws NoSuchAlgorithmException, ParseException, ParseException {
 
         System.out.println("ping!");
 
         Vehicle v = vehicleRepository.findByPublicId(vehicle).orElseThrow(() -> new EntityNotFoundException());
 
         if (Double.parseDouble(latitude) == 0 && Double.parseDouble(latitude) == 0 )
-            throw new InvalidArgumentException(new String[]{"Invalid Coordinates"});
+            throw new InvalidParameterException();
 
 
         String toCheck = latitude+longitude+time+v.getPublicId()+v.getPrivateId();
