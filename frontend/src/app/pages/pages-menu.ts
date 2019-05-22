@@ -10,7 +10,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Incidencias',
     icon: 'nb-home',
-    link: '/pages/dashboard',
+    link: '/pages/incidences',
     home: true,
   },
   {
@@ -25,7 +25,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
     home: true,
   },
-  {
+  /*{
     title: 'FEATURES',
     group: true,
   },
@@ -50,5 +50,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/auth/reset-password',
       },
     ],
-  },
+  },*/
 ];

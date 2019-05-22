@@ -6,17 +6,24 @@ import org.springframework.data.rest.core.config.Projection;
 
 import java.util.Date;
 
-@Projection(name = "positionFullProjection", types = {merotracker.model.VehiclePosition.class})
-public interface VehiclePositionProjection {
+public final class VehiclePositionProjection {
 
-    @Value("#{target.id}")
-    long    getId();
-    Date    getDate();
-    double  getCourse();
-    Short   getSatellites();
-    double  getSpeed();
-    double  getLat();
-    double  getLon();
-    Vehicle getVehicle();
+    @Projection(name = "positionNoVehicle", types = {merotracker.model.VehiclePosition.class})
+    public interface noVehicle {
+        @Value("#{target.id}")
+        long    getId();
+        Date    getDate();
+        double  getCourse();
+        Short   getSatellites();
+        double  getSpeed();
+        double  getLat();
+        double  getLon();
+    }
+
+    @Projection(name = "positionFull", types = {merotracker.model.VehiclePosition.class})
+    public interface full extends noVehicle {
+        Vehicle getVehicle();
+    }
+
 
 }

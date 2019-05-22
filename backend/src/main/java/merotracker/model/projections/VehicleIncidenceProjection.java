@@ -1,21 +1,29 @@
 package merotracker.model.projections;
 
-import merotracker.model.Vehicle;
-import merotracker.model.VehicleIncidence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.util.Date;
 
-@Projection(types = {VehicleIncidence.class},name = "vehicleIndidenceFullProjection")
-public interface VehicleIncidenceProjection {
+public final class VehicleIncidenceProjection {
 
-    @Value("#{target.id}")
-    int     getId();
-    String  getTitle();
-    String  getDescription();
-    Date    getDateStart();
-    Date    getDateEnd();
-    Vehicle getVehicle();
+    @Projection(name = "incidenceNoVehicle", types = {merotracker.model.VehicleIncidence.class})
+    public interface noVehicle {
+
+        @Value("#{target.id}")
+        int     getId();
+        String  getTitle();
+        String  getDescription();
+        Date    getDateStart();
+        Date    getDateEnd();
+
+    }
+
+    @Projection(name = "incidenceFull", types = {merotracker.model.VehicleIncidence.class})
+    public interface full extends noVehicle {
+        VehicleProjections.summary getVehicle();
+    }
+
+
 
 }

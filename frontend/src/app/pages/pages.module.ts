@@ -7,6 +7,7 @@ import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { VehicleTableComponent } from './vehicles/vehicletable.component';
 import { VehicleTableModule } from './vehicles/vehicletable.module';
+import { IncidenceTableModule } from './incidences/incidencetable.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -19,6 +20,7 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     MiscellaneousModule,
     VehicleTableModule,
+    IncidenceTableModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

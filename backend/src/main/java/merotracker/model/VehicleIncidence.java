@@ -35,7 +35,7 @@ public class VehicleIncidence {
     @Column(name = "date_end", nullable = true)
     private Date dateEnd;
 
-    @ManyToOne(targetEntity = Vehicle.class)
+    @ManyToOne(targetEntity = Vehicle.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "ref_vehicle")
     private Vehicle vehicle;
 

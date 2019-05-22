@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
-import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/models/vehicle';
-import { Incidence, IncidenceService, VehicleIncidencesTableServerDataSource } from '../../@core/models/incidence';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Vehicle, VehicleService } from '../../@core/models/vehicle';
 import { NbDateService } from '@nebular/theme';
+import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/models/incidence';
+import { Observable } from 'rxjs';
 import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
 
-@Component({
-  selector: 'ngx-vehicle-table',
-  templateUrl: './vehicletable.component.html',
-})
-export class VehicleTableComponent {
 
+@Component({
+  selector: 'ngx-incidence-table',
+  templateUrl: './incidencetable.component.html',
+  styleUrls: ['../autocompleter-nebular-adapt.scss'],
+})
+export class IncidenceTableComponent implements OnInit {
 
   protected today: Date;
   private DATEFORMAT = 'dd/MM/yyyy';
@@ -22,8 +23,9 @@ export class VehicleTableComponent {
 
   constructor(
     protected vehicleService: VehicleService,
+    protected incidenceService: IncidenceService,
     protected dateService: NbDateService<Date>,
-    protected source: VehicleTableServerDataSource,
+    protected source: VehicleIncidencesTableServerDataSource,
   ) {
     this.today = this.dateService.today();
     this.refreshTable();
@@ -54,13 +56,13 @@ export class VehicleTableComponent {
   }
 
   form2table() {
-    /*if (this.currentInEdit) {
+    if (this.currentInEdit) {
       this.incidenceService.update(this.currentIn).subscribe(
       );
     }else{
       this.incidenceService.create(this.currentIn).subscribe(
       );
-    }*/
+    }
     this.refreshTable();
   }
 
@@ -82,7 +84,7 @@ export class VehicleTableComponent {
 
   onDelete(event): void {
     if (window.confirm('Deseas eliminar la incidencia?')) {
-      //this.incidenceService.delete(event.data);
+      this.incidenceService.delete(event.data);
     }
   }
 
@@ -95,7 +97,7 @@ export class VehicleTableComponent {
   settings = {
     mode: 'external',
     hideSubHeader: false,
-    noDataMessage: 'Sin incidencias que cumplan los criterios de busqueda',
+    noDataMessage: 'Sin vehiculos que cumplan los criterios de busqueda',
     pager: {
       display: true,
       perPage: 10, // Items per page
@@ -119,17 +121,40 @@ export class VehicleTableComponent {
       deleteButtonContent: '<i class="nb-trash"></i>',
     },
     columns: {
-      plate: {
-        title: 'Matricula',
+      vehicle: {
+        title: 'Vehiculo',
         type: 'string',
+        editable: false,
+        valuePrepareFunction: (v: Vehicle) => {
+            return v.plate;
+        },
       },
-      brand: {
-        title: 'Marca',
-        type: 'string',
+      title: {
+        title: 'Concepto',
+        type: 'html',
+        editable: false,
+        valuePrepareFunction: (title,row) => {
+          let elipsistitle = new ElipsisPipe().transform(title,45);
+          return `<span title="${elipsistitle}:\n${row.description}">${elipsistitle}</span>`;
+        }
       },
-      model: {
-        title: 'Modelo',
+      dateStart: {
+        title: 'From',
         type: 'string',
+        filter: false,
+        editable: false,
+        valuePrepareFunction: (date: Date) => {
+          return this.dateService.format(date, this.DATEFORMAT);
+        },
+      },
+      dateEnd: {
+        title: 'To',
+        type: 'string',
+        filter: false,
+        editable: false,
+        valuePrepareFunction: (date: Date) => {
+          return this.dateService.format(date, this.DATEFORMAT);
+        },
       },
     },
   };

@@ -11,8 +11,8 @@ export class Incidence extends Resource {
 
   constructor(
     public id?:                 number,
-    public dateStart?:              Date,
-    public dateEnd?:              Date,
+    public dateStart?:              Date | string,
+    public dateEnd?:              Date | string,
     public title?:              string,
     public description?:            string,
     public vehicle?:            Vehicle,

@@ -1,39 +1,32 @@
 package merotracker.model.projections;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import merotracker.model.Vehicle;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.rest.core.config.Projection;
 
-import javax.persistence.*;
 import java.util.Set;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(exclude = {"vehicle"})
-@Table(name = "trips",schema = "public")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class TripProjection {
+public final class TripProjection {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    @Projection(name = "tripSummary", types = {merotracker.model.Trip.class})
+    public interface summary {
+        @Value("#{target.id}")
+        int     getId();
+        String getDescription();
+    }
 
-    @Column(name = "description", nullable = false, length = 127)
-    private String description;
+    @Projection(name = "tripWithVehicle", types = {merotracker.model.Trip.class})
+    public interface withVehicle extends summary {
+        VehicleProjections.summary getVehicle();
+    }
 
-    @ManyToOne(targetEntity = Vehicle.class)
-    @JoinColumn(name = "ref_vehicle")
-    private Vehicle vehicle;
+    @Projection(name = "tripWithStages", types = {merotracker.model.Trip.class})
+    public interface withStages extends summary {
+        Set<TripStageProjection.summary> getStages();
+    }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip")
-    @JsonIgnore
-    private Set<TripStage> stages;
+    @Projection(name = "tripFull", types = {merotracker.model.Trip.class})
+    public interface full extends withStages, withVehicle {
+
+    }
 
 }

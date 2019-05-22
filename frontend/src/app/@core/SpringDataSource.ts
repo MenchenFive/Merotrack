@@ -1,6 +1,7 @@
 import { ServerDataSource } from 'ng2-smart-table';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { getDeepFromObject } from 'ng2-smart-table/lib/helpers';
 
 export class SpringDataSource extends ServerDataSource {
 
@@ -66,6 +67,16 @@ export class SpringDataSource extends ServerDataSource {
           ? this.conf.endPoint + '/' + this.filterPathKey
           : this.conf.endPoint,
         { params: httpParams, observe: 'response' });
+    }
+
+    protected extractDataFromResponse(res: any): Array<any>{
+      var rawData = res.body;
+        var data = !!this.conf.dataKey ? getDeepFromObject(rawData, this.conf.dataKey, []) : rawData;
+        if (data instanceof Array) {
+            return data;
+        }
+        return [];
+        throw new Error("Data must be an array.\n    Please check that data extracted from the server response by the key '" + this.conf.dataKey + "' exists and is array.");
     }
 
 }

@@ -12,15 +12,15 @@ const urlRoute = 'vehicles';
 export class Vehicle extends Resource {
 
   constructor(
-    public id?:                 number | null,
-    public brand?:               string | null,
-    public model?:           string | null,
-    public plate?:           string | null,
-    public publicId?:           string | null,
-    public privateId?:       string | null,
-    public trips?:             Trip[] | null,
+    public id?:             number | null,
+    public brand?:          string | null,
+    public model?:          string | null,
+    public plate?:          string | null,
+    public publicId?:       string | null,
+    public privateId?:      string | null,
+    public trips?:          Trip[] | null,
     public positions?:      Position[] | null,
-    public incidences? :    Incidence[] | null,
+    public incidences?:     Incidence[] | null,
   )
   { super(); }
 
