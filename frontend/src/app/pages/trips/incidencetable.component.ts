@@ -33,8 +33,6 @@ export class IncidenceTableComponent implements OnInit {
 
   refreshTable(): void {
     this.source.refresh();
-    this.source.reset();
-    this.source.refresh();
   }
 
   sortByDateFrom() {
@@ -57,13 +55,15 @@ export class IncidenceTableComponent implements OnInit {
 
   form2table() {
     if (this.currentInEdit) {
-      this.incidenceService.update(this.currentIn).subscribe(
+      this.incidenceService.patch(this.currentIn).subscribe(
+        res => this.refreshTable(),
       );
     }else{
       this.incidenceService.create(this.currentIn).subscribe(
+        res => this.refreshTable(),
       );
     }
-    this.refreshTable();
+
   }
 
   table2form(tabledata: any) {
@@ -97,7 +97,7 @@ export class IncidenceTableComponent implements OnInit {
   settings = {
     mode: 'external',
     hideSubHeader: false,
-    noDataMessage: 'Sin vehiculos que cumplan los criterios de busqueda',
+    noDataMessage: 'Sin incidencias que cumplan los criterios de busqueda',
     pager: {
       display: true,
       perPage: 10, // Items per page

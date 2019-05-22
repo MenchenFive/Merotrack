@@ -6,45 +6,22 @@
         <form #peForm="ngForm" (ngSubmit)="(peForm.valid) ? [onSubmit(peForm.value),peForm.resetForm()] : null">
 
             <div class=row>
-            <div class="col-sm-4 my-3">
-              <input type="text" #peDescr="ngModel" required nbInput maxlength=80 placeholder="Titulo" [(ngModel)]="currentIn.title" name="title" class="form-control" [ngClass]="{'form-control-danger': peDescr.invalid && (peDescr.dirty || peDescr.touched || peForm.submitted)}">
+              <div class="col-sm-2 my-3">
+                <input type="text" #pePlate="ngModel" required nbInput [pattern]="PLATEREGEX" placeholder="Matricula" [(ngModel)]="currentVe.plate" name="plate" class="form-control" [ngClass]="{'form-control-danger': pePlate.invalid && (pePlate.dirty || pePlate.touched || peForm.submitted)}">
+              </div>
+              <div class="col-sm-3 my-3">
+                <input type="text" #peBrand="ngModel" required nbInput maxlength=150 placeholder="Marca" [(ngModel)]="currentVe.brand" name="brand" class="form-control" [ngClass]="{'form-control-danger': peBrand.invalid && (peBrand.dirty || peBrand.touched || peForm.submitted)}">
+              </div>
+              <div class="col-sm-3 my-3">
+                <input type="text" #peModel="ngModel" required nbInput maxlength=150 placeholder="Modelo" [(ngModel)]="currentVe.model" name="model" class="form-control" [ngClass]="{'form-control-danger': peModel.invalid && (peModel.dirty || peModel.touched || peForm.submitted)}">
+              </div>
+              <div class="col-sm-2 my-3">
+                <button type=submit class="btn btn-primary w-100" nbButton shape="rectangle">{{(currentVeEdit)?'Editar':'Añadir'}}</button>
+              </div>
+              <div class="col-sm-2 my-3">
+                <button type=reset *ngIf="currentVeEdit" class="btn btn-secondary w-100" (click)="onButtonCancel($event); peForm.resetForm()" nbButton shape="rectangle">Cancelar Edición</button>
+              </div>
             </div>
-            <div class="col-sm-8 my-3">
-              <input type="text" #peDescr="ngModel" required nbInput maxlength=150 placeholder="Descripcion" [(ngModel)]="currentIn.description" name="description" class="form-control" [ngClass]="{'form-control-danger': peDescr.invalid && (peDescr.dirty || peDescr.touched || peForm.submitted)}">
-            </div>
-            </div>
-
-            <div class="row">
-            <div class="col-sm-2 my-3">
-              <input name="datestart" class="form-control " nbInput placeholder="Desde" [nbDatepicker]="pickerStart" [(ngModel)]="currentIn.dateStart" #peDateStart="ngModel" [ngClass]="{'form-control-danger': peDateStart.invalid && (peDateStart.dirty || peDateStart.touched || peForm.submitted)}">
-            </div>
-            <div class="col-sm-2 my-3">
-              <input name="dateend" class="form-control" nbInput placeholder="Hasta" [nbDatepicker]="pickerEnd" [(ngModel)]="currentIn.dateEnd" #peDateEnd="ngModel" [ngClass]="{'form-control-danger': peDateEnd.invalid && (peDateEnd.dirty || peDateEnd.touched || peForm.submitted)}">
-            </div>
-            <div class="col-sm-4 my-3"><p-autoComplete
-              required
-              #peAutocompleter="ngModel"
-              [forceSelection]="true"
-              class="col-sm-3"
-              name="company"
-              [(ngModel)]="currentIn.vehicle"
-              [suggestions]="vehicleResults | async"
-              (completeMethod)="search($event)"
-              field="plate"
-              placeholder="Vehiculo (matricula)"
-              [inputStyleClass]="(peAutocompleter.invalid && (peAutocompleter.dirty || peAutocompleter.touched || peForm.submitted)) ? 'form-control-danger form-control' : 'form-control' "
-            ></p-autoComplete></div>
-            <div class="col-sm-2 my-3">
-              <button type=submit class="btn btn-primary w-100" nbButton shape="rectangle">{{(currentInEdit)?'Editar':'Añadir'}}</button>
-            </div>
-            <div class="col-sm-2 my-3">
-              <button type=reset *ngIf="currentInEdit" class="btn btn-secondary w-100" (click)="onButtonCancel($event); peForm.resetForm()" nbButton shape="rectangle">Cancelar Edición</button>
-            </div>
-            </div>
-
-            <nb-datepicker #pickerStart [max]="(currentIn.dateEnd)?currentIn.dateEnd:today" ></nb-datepicker>
-            <nb-datepicker #pickerEnd   [min]="(currentIn.dateStart)?currentIn.dateStart:null" ></nb-datepicker>
-
         </form>
         <br>
         <ng2-smart-table

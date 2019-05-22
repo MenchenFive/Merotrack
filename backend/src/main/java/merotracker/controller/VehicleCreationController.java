@@ -35,8 +35,8 @@ public class VehicleCreationController {
     }
 
     public String generateRandomString(){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 97;
+        int rightLimit = 122;
         int targetStringLength = 16;
         Random random = new Random();
         StringBuilder buffer = new StringBuilder(targetStringLength);

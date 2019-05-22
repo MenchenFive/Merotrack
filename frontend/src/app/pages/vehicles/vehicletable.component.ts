@@ -13,12 +13,11 @@ export class VehicleTableComponent {
 
 
   protected today: Date;
-  private DATEFORMAT = 'dd/MM/yyyy';
+  protected DATEFORMAT = 'dd/MM/yyyy';
+  protected PLATEREGEX = '([0-9]{4}[A-Za-z]{3})|([A-Za-z]{1,2}[0-9]{4}[A-Za-z]{1,2})';
 
-  protected currentInEdit:  Incidence = null;
-  protected currentIn:      Incidence = Incidence.newNull();
-
-  protected vehicleResults:   Observable<Vehicle[]>;
+  protected currentVeEdit:  Vehicle = null;
+  protected currentVe:      Vehicle = Incidence.newNull();
 
   constructor(
     protected vehicleService: VehicleService,
@@ -31,16 +30,6 @@ export class VehicleTableComponent {
 
   refreshTable(): void {
     this.source.refresh();
-    this.source.reset();
-    this.source.refresh();
-  }
-
-  sortByDateFrom() {
-    this.source.setSort([{ field: 'dateStart', direction: 'desc' }], true);
-  }
-
-  ngOnInit(): void {
-    this.sortByDateFrom();
   }
 
   onSubmit(event) {
@@ -49,19 +38,20 @@ export class VehicleTableComponent {
   }
 
   onButtonCancel(event) {
-    this.currentInEdit = null;
-    this.currentIn = Incidence.newNull();
+    this.currentVeEdit = null;
+    this.currentVe = Incidence.newNull();
   }
 
   form2table() {
-    /*if (this.currentInEdit) {
-      this.incidenceService.update(this.currentIn).subscribe(
+    if (this.currentVeEdit) {
+      this.vehicleService.patch(this.currentVe).subscribe(
+        res => this.refreshTable()
       );
     }else{
-      this.incidenceService.create(this.currentIn).subscribe(
+      this.vehicleService.create(this.currentVe).subscribe(
+        res => this.refreshTable()
       );
-    }*/
-    this.refreshTable();
+    }
   }
 
   table2form(tabledata: any) {
@@ -69,15 +59,8 @@ export class VehicleTableComponent {
       tabledata.dateStart = this.dateService.parse(tabledata.dateStart, this.DATEFORMAT);
       tabledata.dateEnd = this.dateService.parse(tabledata.dateEnd, this.DATEFORMAT);
     }
-    this.currentInEdit = tabledata;
-    this.currentIn = tabledata;
-  }
-
-  search(event) {
-    this.vehicleResults = this.vehicleService.search(
-        'findByPlateIgnoreCaseContaining',
-        {params: [{key: 'plate', value: event.query}]},
-    )
+    this.currentVeEdit = tabledata;
+    this.currentVe = tabledata;
   }
 
   onDelete(event): void {
@@ -87,7 +70,7 @@ export class VehicleTableComponent {
   }
 
   onEditTable(event) {
-    if(this.currentInEdit)
+    if(this.currentVeEdit)
       this.onButtonCancel(null);
     this.table2form(event.data);
   }
