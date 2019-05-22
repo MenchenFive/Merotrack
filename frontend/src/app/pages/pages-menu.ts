@@ -2,28 +2,30 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Vehiculos',
-    icon: 'nb-home',
-    link: '/pages/vehicles',
+    title: 'Mapa',
+    icon: 'nb-location',
+    link: '/pages/dashboard',
     home: true,
+  },
+  {
+    title: 'Vehiculos',
+    icon: 'fas fa-truck fa-2x',
+    link: '/pages/vehicles',
   },
   {
     title: 'Incidencias',
-    icon: 'nb-home',
+    icon: 'nb-danger',
     link: '/pages/incidences',
-    home: true,
   },
   {
     title: 'Viajes',
-    icon: 'nb-home',
+    icon: 'nb-angle-double-right',
     link: '/pages/dashboard',
-    home: true,
   },
   {
     title: 'Usuarios',
-    icon: 'nb-home',
+    icon: 'nb-person',
     link: '/pages/dashboard',
-    home: true,
   },
   /*{
     title: 'FEATURES',
