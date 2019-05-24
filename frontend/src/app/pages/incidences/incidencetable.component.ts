@@ -33,8 +33,6 @@ export class IncidenceTableComponent implements OnInit {
 
   refreshTable(): void {
     this.source.refresh();
-    this.source.reset();
-    this.source.refresh();
   }
 
   sortByDateFrom() {
@@ -58,12 +56,14 @@ export class IncidenceTableComponent implements OnInit {
   form2table() {
     if (this.currentInEdit) {
       this.incidenceService.update(this.currentIn).subscribe(
+        res => { this.refreshTable(); }
       );
     }else{
       this.incidenceService.create(this.currentIn).subscribe(
+        res => { this.refreshTable(); }
       );
     }
-    this.refreshTable();
+
   }
 
   table2form(tabledata: any) {

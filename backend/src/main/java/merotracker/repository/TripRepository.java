@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin
-@RepositoryRestResource(excerptProjection = TripProjection.summary.class)
+@RepositoryRestResource(excerptProjection = TripProjection.full.class)
 public interface TripRepository extends JpaRepository<Trip, Integer>{
 
 }

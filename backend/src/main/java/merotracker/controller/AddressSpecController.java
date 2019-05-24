@@ -1,9 +1,9 @@
 package merotracker.controller;
 
-import merotracker.model.Vehicle;
-import merotracker.model.projections.VehicleProjections;
-import merotracker.repository.VehicleRepository;
-import merotracker.specification.VehicleSpecifications;
+import merotracker.model.Adress;
+import merotracker.model.projections.AddressProjection;
+import merotracker.repository.AddressRepository;
+import merotracker.specification.AddressesSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,40 +22,34 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RepositoryRestController
-public class VehicleSpecController {
+public class AddressSpecController {
 
     @Autowired
-    private VehicleRepository repo;
+    private AddressRepository repo;
 
     @Autowired
-    private PagedResourcesAssembler<VehicleProjections.summary> assembler;
+    private PagedResourcesAssembler<AddressProjection.full> assembler;
 
     @Autowired
     private ProjectionFactory factory;
 
-    @GetMapping(value = "/vehicles/specificationquery")
+    @GetMapping(value = "/adresss/specificationquery")
     public @ResponseBody
-    ResponseEntity<?> getVehicles(
+    ResponseEntity<?> getAdresss(
             Pageable pageable,
-            @RequestParam(value = "brand" , required = false) String brand,
-            @RequestParam(value = "model" , required = false) String model,
-            @RequestParam(value = "plate" , required = false) String plate
+            @RequestParam(value = "name" , required = false) String name
     ) {
-        Specification<Vehicle> spec = VehicleSpecifications.chainedSpecification (
-                brand,plate,model
-        );
+        Specification<Adress> spec = AddressesSpecifications.hasName(name);
 
-        Page<Vehicle> found = repo.findAll(spec, pageable);
+        Page<Adress> found = repo.findAll(spec, pageable);
 
-        Page<VehicleProjections.summary> projected = found.map(l -> factory.createProjection(VehicleProjections.summary.class, l));
+        Page<AddressProjection.full> projected = found.map(l -> factory.createProjection(AddressProjection.full.class, l));
 
-        PagedResources<Resource<VehicleProjections.summary>> resources = assembler.toResource(projected);
+        PagedResources<Resource<AddressProjection.full>> resources = assembler.toResource(projected);
 
-        resources.add(linkTo(methodOn(VehicleSpecController.class).getVehicles(
+        resources.add(linkTo(methodOn(AddressSpecController.class).getAdresss(
                 pageable,
-                brand,
-                model,
-                plate
+                name
         )).withSelfRel());
 
         return ResponseEntity.ok(resources);

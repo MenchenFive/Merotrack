@@ -2,33 +2,29 @@ package merotracker.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"vehicle"})
-@Table(name = "trips",schema = "public")
-public class Trip {
+@Table(name = "address",schema = "public")
+public class Adress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "description", nullable = false, length = 127)
-    private String description;
+    @Column(name = "address", nullable = false, length = 127)
+    private String address;
 
-    @ManyToOne(targetEntity = Vehicle.class)
-    @JoinColumn(name = "ref_vehicle")
-    private Vehicle vehicle;
+    @Column(name = "lat", nullable = false)
+    private double lat;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip")
-    private Set<TripStage> stages;
+    @Column(name = "lon", nullable = false)
+    private double lon;
 
 }

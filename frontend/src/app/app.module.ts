@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularHalModule } from 'angular4-hal';
 import { ExternalConfigurationService } from './ExternalConfigurationService';
 import { PipesModule } from './@core/pipes/pipes.module';
+import { NbDialogModule } from '@nebular/theme';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { PipesModule } from './@core/pipes/pipes.module';
     AppRoutingModule,
     AngularHalModule.forRoot(),
     NgbModule.forRoot(),
+    NbDialogModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
     PipesModule,

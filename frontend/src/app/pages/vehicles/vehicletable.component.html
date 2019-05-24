@@ -1,7 +1,4 @@
 <nb-card>
-    <nb-card-header>
-      Incidencias
-    </nb-card-header>
     <nb-card-body>
         <form #peForm="ngForm" (ngSubmit)="(peForm.valid) ? [onSubmit(peForm.value),peForm.resetForm()] : null">
 

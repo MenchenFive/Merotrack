@@ -1,38 +1,41 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Component, OnInit, ɵConsole, TemplateRef, ViewChild } from '@angular/core';
 import { Vehicle, VehicleService } from '../../@core/models/vehicle';
-import { NbDateService } from '@nebular/theme';
+import { NbDateService, NbDialogService } from '@nebular/theme';
 import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/models/incidence';
 import { Observable } from 'rxjs';
 import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
-
+import { TripTableServerDataSource, Trip, TripService } from '../../@core/models/trip';
+import { TripStageService } from '../../@core/models/tripstage';
+import * as L from 'leaflet';
+import 'style-loader!leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet/dist/images/marker-icon.png';
 
 @Component({
-  selector: 'ngx-incidence-table',
-  templateUrl: './incidencetable.component.html',
+  selector: 'ngx-trip-table',
+  templateUrl: './triptable.component.html',
   styleUrls: ['../autocompleter-nebular-adapt.scss'],
 })
-export class IncidenceTableComponent implements OnInit {
+export class TripTableComponent implements OnInit {
+
+  @ViewChild('dialog') dialog;
 
   protected today: Date;
   private DATEFORMAT = 'dd/MM/yyyy';
 
-  protected currentInEdit:  Incidence = null;
-  protected currentIn:      Incidence = Incidence.newNull();
+  protected currentTrEdit:  Trip = null ;
+  protected currentTr:      Trip = Trip.newNull() ;
 
   protected vehicleResults:   Observable<Vehicle[]>;
 
   constructor(
     protected vehicleService: VehicleService,
-    protected incidenceService: IncidenceService,
+    protected tripService: TripService,
+    protected tripStageService: TripStageService,
+    protected source: TripTableServerDataSource,
     protected dateService: NbDateService<Date>,
-    protected source: VehicleIncidencesTableServerDataSource,
+    private dialogService: NbDialogService,
   ) {
-    this.today = this.dateService.today();
-    this.refreshTable();
-  }
-
-  refreshTable(): void {
-    this.source.refresh();
   }
 
   sortByDateFrom() {
@@ -43,61 +46,53 @@ export class IncidenceTableComponent implements OnInit {
     this.sortByDateFrom();
   }
 
-  onSubmit(event) {
-    this.form2table();
-    this.onButtonCancel(null);
-  }
-
-  onButtonCancel(event) {
-    this.currentInEdit = null;
-    this.currentIn = Incidence.newNull();
-  }
-
-  form2table() {
-    if (this.currentInEdit) {
-      this.incidenceService.patch(this.currentIn).subscribe(
-        res => this.refreshTable(),
-      );
-    }else{
-      this.incidenceService.create(this.currentIn).subscribe(
-        res => this.refreshTable(),
-      );
-    }
-
-  }
-
-  table2form(tabledata: any) {
-    if (typeof tabledata.dateStart === 'string') {
-      tabledata.dateStart = this.dateService.parse(tabledata.dateStart, this.DATEFORMAT);
-      tabledata.dateEnd = this.dateService.parse(tabledata.dateEnd, this.DATEFORMAT);
-    }
-    this.currentInEdit = tabledata;
-    this.currentIn = tabledata;
-  }
-
-  search(event) {
-    this.vehicleResults = this.vehicleService.search(
-        'findByPlateIgnoreCaseContaining',
-        {params: [{key: 'plate', value: event.query}]},
-    )
-  }
-
   onDelete(event): void {
-    if (window.confirm('Deseas eliminar la incidencia?')) {
-      this.incidenceService.delete(event.data);
+    if (window.confirm('Deseas eliminar el viaje?\nEsta acción es irreversible')) {
+      this.tripService.delete(event.data);
     }
   }
 
-  onEditTable(event) {
-    if(this.currentInEdit)
-      this.onButtonCancel(null);
-    this.table2form(event.data);
+  onAdd(event): void{
+    this.dialogService.open(this.dialog , { context: null } );
   }
+
+  onEditTable(event): void{
+    this.dialogService.open(this.dialog , { context: null } );
+  }
+
+  onMapReady(map: L.Map) {
+    L.Icon.Default.imagePath = '/assets/img/markers/';
+    L.Routing.control({
+      //waypoints: this.waypoints,
+      routeWhileDragging: false,
+    })
+    .on('routeselected', (e) => {
+      var route = e.route;
+      this.waypoints = route.waypoints;
+    })
+    .addTo(map);
+  }
+
+  protected waypoints = [
+    L.latLng(38.991709, -3.886109),
+    L.latLng(39.991709, -4.886109)
+  ];
+
+  options = {
+    layers: [
+      L.tileLayer('https://api.mapbox.com/styles/v1/menchencito/cjvfn4t2838je1fprnc72qg4k/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWVuY2hlbmNpdG8iLCJhIjoiY2pxd3Y0dGwyMGRocDN4cXU0c2xrdmswdiJ9.fWZ9jJbD-scJ2zWdGMsobw', {
+        maxZoom: 18,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }),
+    ],
+    zoom: 6,
+    center: L.latLng({ lat: 38.991709, lng: -3.88610 }),
+  };
 
   settings = {
     mode: 'external',
     hideSubHeader: false,
-    noDataMessage: 'Sin incidencias que cumplan los criterios de busqueda',
+    noDataMessage: 'Sin viajes que cumplan los criterios de busqueda',
     pager: {
       display: true,
       perPage: 10, // Items per page
@@ -105,7 +100,7 @@ export class IncidenceTableComponent implements OnInit {
     actions: {
       edit: true,
       delete: true,
-      add: false,
+      add: true,
     },
     add: {
       addButtonContent: '<i class="nb-plus"></i>',

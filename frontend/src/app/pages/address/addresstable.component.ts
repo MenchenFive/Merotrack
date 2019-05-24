@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/models/vehicle';
-import { Incidence, IncidenceService, VehicleIncidencesTableServerDataSource } from '../../@core/models/incidence';
-import { Observable } from 'rxjs';
 import { NbDateService } from '@nebular/theme';
-import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
+
+import { Incidence } from '../../@core/models/incidence';
+import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/models/vehicle';
 
 @Component({
-  selector: 'ngx-vehicle-table',
-  templateUrl: './vehicletable.component.html',
+  selector: 'ngx-address-table',
+  templateUrl: './addresstable.component.html',
 })
-export class VehicleTableComponent {
+export class AddressTableComponent {
 
 
   protected today: Date;
@@ -78,7 +77,7 @@ export class VehicleTableComponent {
   settings = {
     mode: 'external',
     hideSubHeader: false,
-    noDataMessage: 'Sin vehiculos que cumplan los criterios de busqueda',
+    noDataMessage: 'Sin incidencias que cumplan los criterios de busqueda',
     pager: {
       display: true,
       perPage: 10, // Items per page

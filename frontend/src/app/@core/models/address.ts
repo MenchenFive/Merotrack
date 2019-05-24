@@ -2,24 +2,22 @@ import { Injectable, Injector } from '@angular/core';
 import { RestService, Resource } from 'angular4-hal';
 import { HttpClient } from '@angular/common/http';
 import { SpringDataSource } from '../SpringDataSource';
-import { Vehicle } from './vehicle';
-import { TripStage } from './tripstage';
 
 
-const urlRoute = 'trips';
+const urlRoute = 'adresses';
 
-export class Trip extends Resource {
+export class Adress extends Resource {
 
   constructor(
     public id?:                 number | null,
     public description?:               string | null,
-    public vehicle?:           Vehicle | null,
-    public stages?:           TripStage[] | null,
+    public lat?:  number |null,
+    public lon?:  number | null,
   )
   { super(); }
 
-  public static newNull(): Trip {
-    return new Trip(null, null, null, []);
+  public static newNull(): Adress {
+    return new Adress(null, null, null, null);
   }
 
 }
@@ -27,9 +25,9 @@ export class Trip extends Resource {
 @Injectable({
   providedIn: 'root',
 })
-export class TripService extends RestService<Trip> {
+export class TripService extends RestService<Adress> {
   constructor(injector: Injector) {
-    super(Trip, urlRoute, injector);
+    super(Adress, urlRoute, injector);
   }
 }
 
@@ -38,6 +36,6 @@ export class TripService extends RestService<Trip> {
 })
 export class TripTableServerDataSource extends SpringDataSource {
   constructor(http: HttpClient) {
-    super(http, `http://localhost:8090/${urlRoute}`, `_embedded.trips`, 'page.totalElements', 'specificationquery');
+    super(http, `http://localhost:8090/${urlRoute}`, `_embedded.adresses`, 'page.totalElements', 'specificationquery');
   }
 }

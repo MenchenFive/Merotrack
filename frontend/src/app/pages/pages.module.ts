@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 
-import { PagesComponent } from './pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
-import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { VehicleTableComponent } from './vehicles/vehicletable.component';
-import { VehicleTableModule } from './vehicles/vehicletable.module';
 import { IncidenceTableModule } from './incidences/incidencetable.module';
+import { MapsModule } from './maps/maps.module';
+import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { PagesRoutingModule } from './pages-routing.module';
+import { PagesComponent } from './pages.component';
+import { TripTableModule } from './trips/triptable.module';
+import { VehicleTableModule } from './vehicles/vehicletable.module';
+import { AddressTableModule } from './address/addresstable.module';
+
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -17,10 +19,12 @@ const PAGES_COMPONENTS = [
   imports: [
     PagesRoutingModule,
     ThemeModule,
-    DashboardModule,
+    MapsModule,
     MiscellaneousModule,
     VehicleTableModule,
     IncidenceTableModule,
+    TripTableModule,
+    AddressTableModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

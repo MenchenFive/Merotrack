@@ -2,9 +2,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { MapsComponent } from './maps/maps.component';
 import { VehicleTableComponent } from './vehicles/vehicletable.component';
 import { IncidenceTableComponent } from './incidences/incidencetable.component';
+import { TripTableComponent } from './trips/triptable.component';
+import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { AddressTableComponent } from './address/addresstable.component';
 
 const routes: Routes = [{
   path: '',
@@ -15,17 +18,25 @@ const routes: Routes = [{
       component: VehicleTableComponent,
     },
     {
-      path: 'dashboard',
-      component: DashboardComponent,
+      path: 'maps',
+      component: MapsComponent,
+    },
+    {
+      path: 'address',
+      component: AddressTableComponent,
     },
     {
       path: 'incidences',
       component: IncidenceTableComponent,
     },
     {
+      path: 'trips',
+      component: TripTableComponent,
+    },
+    {
       path: '',
-      redirectTo: 'dashboard',
       pathMatch: 'full',
+      component: NotFoundComponent,
     },
   ],
 }];
