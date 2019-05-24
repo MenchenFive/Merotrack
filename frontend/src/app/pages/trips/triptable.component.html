@@ -1,24 +1,12 @@
-  <nb-card>
-    <nb-card-body>
-        <ng2-smart-table
-        class=mt-3
-            [settings]="settings"
-            [source]="source"
-            (edit)="onEditTable($event)"
-            (delete)="onDelete($event)"
-            (create)="onAdd($event)">
-        </ng2-smart-table>
-    </nb-card-body>
+<nb-card>
+  <nb-card-body>
+      <ng2-smart-table
+      class=mt-3
+          [settings]="settings"
+          [source]="source"
+          (userRowSelect)="onEditTable($event)"
+          (delete)="onDelete($event)"
+          (create)="onAdd($event)">
+      </ng2-smart-table>
+  </nb-card-body>
 </nb-card>
-
-<ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>{{data|json}}</nb-card-header>
-    <nb-card-body>
-      <div leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton (click)="ref.close()">Close</button>
-    </nb-card-footer>
-  </nb-card>
-</ng-template>

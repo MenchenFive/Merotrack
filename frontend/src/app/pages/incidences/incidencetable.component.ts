@@ -1,9 +1,9 @@
 import { Component, OnInit, ɵConsole } from '@angular/core';
-import { Vehicle, VehicleService } from '../../@core/models/vehicle';
+import { Vehicle, VehicleService } from '../../@core/data/models/vehicle';
 import { NbDateService } from '@nebular/theme';
-import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/models/incidence';
+import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/data/models/incidence';
 import { Observable } from 'rxjs';
-import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
+import { ElipsisPipe } from '../../@core/data/pipes/elipsis.pipe';
 
 
 @Component({

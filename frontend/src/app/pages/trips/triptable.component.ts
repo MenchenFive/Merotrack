@@ -1,15 +1,12 @@
 import { Component, OnInit, ɵConsole, TemplateRef, ViewChild } from '@angular/core';
-import { Vehicle, VehicleService } from '../../@core/models/vehicle';
+import { Vehicle, VehicleService } from '../../@core/data/models/vehicle';
 import { NbDateService, NbDialogService } from '@nebular/theme';
-import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/models/incidence';
+import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/data/models/incidence';
 import { Observable } from 'rxjs';
-import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
-import { TripTableServerDataSource, Trip, TripService } from '../../@core/models/trip';
-import { TripStageService } from '../../@core/models/tripstage';
-import * as L from 'leaflet';
-import 'style-loader!leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine';
-import 'leaflet/dist/images/marker-icon.png';
+import { ElipsisPipe } from '../../@core/data/pipes/elipsis.pipe';
+import { TripTableServerDataSource, Trip, TripService } from '../../@core/data/models/trip';
+import { TripStageService, TripStage } from '../../@core/data/models/tripstage';
+import { MaproutingdialogComponent } from './maproutingdialog/maproutingdialog.component';
 
 @Component({
   selector: 'ngx-trip-table',
@@ -17,8 +14,6 @@ import 'leaflet/dist/images/marker-icon.png';
   styleUrls: ['../autocompleter-nebular-adapt.scss'],
 })
 export class TripTableComponent implements OnInit {
-
-  @ViewChild('dialog') dialog;
 
   protected today: Date;
   private DATEFORMAT = 'dd/MM/yyyy';
@@ -53,41 +48,20 @@ export class TripTableComponent implements OnInit {
   }
 
   onAdd(event): void{
-    this.dialogService.open(this.dialog , { context: null } );
+    this.dialogService.open(MaproutingdialogComponent, {
+      context: {
+        item: TripStage.newNull(),
+      },
+    });
   }
 
   onEditTable(event): void{
-    this.dialogService.open(this.dialog , { context: null } );
+    this.dialogService.open(MaproutingdialogComponent, {
+      context: {
+        item: event.data,
+      },
+    });
   }
-
-  onMapReady(map: L.Map) {
-    L.Icon.Default.imagePath = '/assets/img/markers/';
-    L.Routing.control({
-      //waypoints: this.waypoints,
-      routeWhileDragging: false,
-    })
-    .on('routeselected', (e) => {
-      var route = e.route;
-      this.waypoints = route.waypoints;
-    })
-    .addTo(map);
-  }
-
-  protected waypoints = [
-    L.latLng(38.991709, -3.886109),
-    L.latLng(39.991709, -4.886109)
-  ];
-
-  options = {
-    layers: [
-      L.tileLayer('https://api.mapbox.com/styles/v1/menchencito/cjvfn4t2838je1fprnc72qg4k/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWVuY2hlbmNpdG8iLCJhIjoiY2pxd3Y0dGwyMGRocDN4cXU0c2xrdmswdiJ9.fWZ9jJbD-scJ2zWdGMsobw', {
-        maxZoom: 18,
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }),
-    ],
-    zoom: 6,
-    center: L.latLng({ lat: 38.991709, lng: -3.88610 }),
-  };
 
   settings = {
     mode: 'external',
@@ -98,7 +72,7 @@ export class TripTableComponent implements OnInit {
       perPage: 10, // Items per page
     },
     actions: {
-      edit: true,
+      edit: false,
       delete: true,
       add: true,
     },

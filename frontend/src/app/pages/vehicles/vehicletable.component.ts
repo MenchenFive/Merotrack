@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/models/vehicle';
-import { Incidence, IncidenceService, VehicleIncidencesTableServerDataSource } from '../../@core/models/incidence';
+import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/data/models/vehicle';
+import { Incidence, IncidenceService, VehicleIncidencesTableServerDataSource } from '../../@core/data/models/incidence';
 import { Observable } from 'rxjs';
 import { NbDateService } from '@nebular/theme';
-import { ElipsisPipe } from '../../@core/pipes/elipsis.pipe';
+import { ElipsisPipe } from '../../@core/data/pipes/elipsis.pipe';
 
 @Component({
   selector: 'ngx-vehicle-table',

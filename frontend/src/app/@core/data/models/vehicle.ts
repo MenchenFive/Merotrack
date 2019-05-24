@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { RestService, Resource } from 'angular4-hal';
 import { HttpClient } from '@angular/common/http';
-import { SpringDataSource } from '../SpringDataSource';
-import { ExternalConfigurationService } from '../../ExternalConfigurationService';
+import { SpringDataSource } from '../../SpringDataSource';
+import { ExternalConfigurationService } from '../../../ExternalConfigurationService';
 import { Incidence } from './incidence';
 import { Position } from './position';
 import { Trip } from './trip';

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NbDateService } from '@nebular/theme';
 
-import { Incidence } from '../../@core/models/incidence';
-import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/models/vehicle';
+import { Incidence } from '../../@core/data/models/incidence';
+import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/data/models/vehicle';
 
 @Component({
   selector: 'ngx-address-table',

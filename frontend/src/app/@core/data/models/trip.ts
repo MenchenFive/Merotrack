@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { RestService, Resource } from 'angular4-hal';
 import { HttpClient } from '@angular/common/http';
-import { SpringDataSource } from '../SpringDataSource';
+import { SpringDataSource } from '../../SpringDataSource';
 import { Vehicle } from './vehicle';
 import { TripStage } from './tripstage';
 

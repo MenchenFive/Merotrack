@@ -4,7 +4,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ThemeModule } from '../../@theme/theme.module';
 import { IncidenceTableComponent } from './incidencetable.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { PipesModule } from '../../@core/pipes/pipes.module';
+import { PipesModule } from '../../@core/data/pipes/pipes.module';
 
 @NgModule({
   imports: [

@@ -1,0 +1,11 @@
+<nb-card style="height: 90vh; width: 90vw;">
+    <nb-card-header>{{item|json}}</nb-card-header>
+    <nb-card-body class=container>
+      <div class="row">
+          <div leaflet class="col-sm-12" style="min-height: 70vh; min-width: 70vw; overflow: hidden !important;" [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="plan($event)">Close</button>
+    </nb-card-footer>
+  </nb-card>

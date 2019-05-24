@@ -15,7 +15,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularHalModule } from 'angular4-hal';
 import { ExternalConfigurationService } from './ExternalConfigurationService';
-import { PipesModule } from './@core/pipes/pipes.module';
+import { PipesModule } from './@core/data/pipes/pipes.module';
 import { NbDialogModule } from '@nebular/theme';
 
 @NgModule({
