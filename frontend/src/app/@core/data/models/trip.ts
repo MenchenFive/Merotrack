@@ -14,12 +14,13 @@ export class Trip extends Resource {
     public id?:                 number | null,
     public description?:               string | null,
     public vehicle?:           Vehicle | null,
+    public dateStart?:          Date |null,
     public stages?:           TripStage[] | null,
   )
   { super(); }
 
   public static newNull(): Trip {
-    return new Trip(null, null, null, []);
+    return new Trip(null, null, null, null, []);
   }
 
 }

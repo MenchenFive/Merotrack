@@ -4,7 +4,7 @@
 
             <div class=row>
             <div class="col-sm-4 my-3">
-              <input type="text" #peDescr="ngModel" required nbInput maxlength=80 placeholder="Titulo" [(ngModel)]="currentIn.title" name="title" class="form-control" [ngClass]="{'form-control-danger': peDescr.invalid && (peDescr.dirty || peDescr.touched || peForm.submitted)}">
+              <input type="text" #peTitle="ngModel" required nbInput maxlength=80 placeholder="Titulo" [(ngModel)]="currentIn.title" name="title" class="form-control" [ngClass]="{'form-control-danger': peTitle.invalid && (peTitle.dirty || peTitle.touched || peForm.submitted)}">
             </div>
             <div class="col-sm-8 my-3">
               <input type="text" #peDescr="ngModel" required nbInput maxlength=150 placeholder="Descripcion" [(ngModel)]="currentIn.description" name="description" class="form-control" [ngClass]="{'form-control-danger': peDescr.invalid && (peDescr.dirty || peDescr.touched || peForm.submitted)}">

@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Data
@@ -21,20 +20,13 @@ public class TripStage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "date_a", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dateA;
-
-    @Column(name = "comments", nullable = true, length = 127)
-    private String comments;
-
     @Column(name = "lat", nullable = true, precision = 0)
     private Float lat;
 
     @Column(name = "lon", nullable = true, precision = 0)
     private Float lon;
 
-    @ManyToOne(targetEntity = Trip.class)
+    @ManyToOne(targetEntity = Trip.class, cascade = {CascadeType.DETACH})
     @JoinColumn(name = "ref_trip")
     private Trip trip;
 

@@ -1,11 +1,36 @@
-<nb-card style="height: 90vh; width: 90vw;">
-    <nb-card-header>{{item|json}}</nb-card-header>
+<nb-card style="height: 95vh; width: 95vw;">
+    <nb-card-header class=container>
+        <form #peForm="ngForm" (ngSubmit)="(peForm.valid) ? [onSubmit(peForm.value),peForm.resetForm()] : null">
+      <div class="row">
+        <div class="col-sm-8 my-3">
+          <input type="text" #peTitle="ngModel" required nbInput maxlength=80 placeholder="Titulo" [(ngModel)]="currentTr.description" name="description" class="form-control" [ngClass]="{'form-control-danger': peTitle.invalid && (peTitle.dirty || peTitle.touched || peForm.submitted)}">
+        </div>
+        <div class="col-sm-2 my-3">
+          <input name="datestart" class="form-control " nbInput placeholder="Fecha inicio" [nbDatepicker]="pickerStart" [(ngModel)]="currentTr.dateStart" #peDateStart="ngModel" [ngClass]="{'form-control-danger': peDateStart.invalid && (peDateStart.dirty || peDateStart.touched || peForm.submitted)}">
+        </div>
+        <div class="col-sm-2 my-3"><p-autoComplete
+          required
+          #peAutocompleter="ngModel"
+          [forceSelection]="true"
+          class="col-sm-3"
+          name="company"
+          [(ngModel)]="currentTr.vehicle"
+          [suggestions]="vehicleResults | async"
+          (completeMethod)="search($event)"
+          field="plate"
+          placeholder="Vehiculo (matricula)"
+          [inputStyleClass]="(peAutocompleter.invalid && (peAutocompleter.dirty || peAutocompleter.touched || peForm.submitted)) ? 'form-control-danger form-control' : 'form-control' "
+        ></p-autoComplete></div>
+      </div>
+    </form>
+  </nb-card-header>
     <nb-card-body class=container>
       <div class="row">
-          <div leaflet class="col-sm-12" style="min-height: 70vh; min-width: 70vw; overflow: hidden !important;" [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
+          <div leaflet class="col-sm-12" style="min-height: 67vh; min-width: 70vw; overflow: hidden !important;" [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton (click)="plan($event)">Close</button>
+      <button nbButton (click)="onSubmit($event)">Guardar</button>
     </nb-card-footer>
   </nb-card>
+  <nb-datepicker #pickerStart></nb-datepicker>

@@ -11,8 +11,6 @@ export class TripStage extends Resource {
 
   constructor(
     public id?:                 number | null,
-    public dateA?:               Date | null,
-    public comments?:           string | null,
     public lat?:           number | null,
     public lon?:           number | null,
     public trip?:       Trip | null,
@@ -20,7 +18,7 @@ export class TripStage extends Resource {
   { super(); }
 
   public static newNull(): TripStage {
-    return new TripStage(null,null,null,null,null,null);
+    return new TripStage(null,null,null,null);
   }
 
 

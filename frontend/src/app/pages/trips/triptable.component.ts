@@ -19,7 +19,7 @@ export class TripTableComponent implements OnInit {
   private DATEFORMAT = 'dd/MM/yyyy';
 
   protected currentTrEdit:  Trip = null ;
-  protected currentTr:      Trip = Trip.newNull() ;
+  protected currentTr:      Trip = Trip.newNull();
 
   protected vehicleResults:   Observable<Vehicle[]>;
 
@@ -43,24 +43,27 @@ export class TripTableComponent implements OnInit {
 
   onDelete(event): void {
     if (window.confirm('Deseas eliminar el viaje?\nEsta acción es irreversible')) {
-      this.tripService.delete(event.data);
+      this.tripService.delete(event.data).subscribe( res => this.source.refresh() );
+
     }
   }
 
   onAdd(event): void{
     this.dialogService.open(MaproutingdialogComponent, {
       context: {
-        item: TripStage.newNull(),
+        item: Trip.newNull(),
       },
     });
   }
 
   onEditTable(event): void{
-    this.dialogService.open(MaproutingdialogComponent, {
-      context: {
-        item: event.data,
-      },
-    });
+    this.tripService.get(event.data.id,[{key:"projection",value:"tripFull"}]).subscribe( res => {
+      this.dialogService.open(MaproutingdialogComponent, {
+        context: {
+          item: res,
+        },
+      });
+    })
   }
 
   settings = {
@@ -98,7 +101,7 @@ export class TripTableComponent implements OnInit {
             return v.plate;
         },
       },
-      title: {
+      description: {
         title: 'Concepto',
         type: 'html',
         editable: false,
@@ -109,15 +112,6 @@ export class TripTableComponent implements OnInit {
       },
       dateStart: {
         title: 'From',
-        type: 'string',
-        filter: false,
-        editable: false,
-        valuePrepareFunction: (date: Date) => {
-          return this.dateService.format(date, this.DATEFORMAT);
-        },
-      },
-      dateEnd: {
-        title: 'To',
         type: 'string',
         filter: false,
         editable: false,

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -21,6 +22,10 @@ public class Trip {
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_start", nullable = false)
+    private Date dateStart;
+
     @Column(name = "description", nullable = false, length = 127)
     private String description;
 
@@ -28,7 +33,7 @@ public class Trip {
     @JoinColumn(name = "ref_vehicle")
     private Vehicle vehicle;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trip", cascade = {CascadeType.REMOVE})
     private Set<TripStage> stages;
 
 }
