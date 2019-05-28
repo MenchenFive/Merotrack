@@ -14,14 +14,23 @@ export class TripStage extends Resource {
     public lat?:           number | null,
     public lon?:           number | null,
     public trip?:       Trip | null,
+    public ord?:      number | null,
   )
   { super(); }
 
   public static newNull(): TripStage {
-    return new TripStage(null,null,null,null);
+    return new TripStage(null,null,null,null,null);
   }
 
-
+  public static compare( a: TripStage, b: TripStage ) {
+    if ( a.ord < b.ord ){
+      return -1;
+    }
+    if ( a.ord > b.ord ){
+      return 1;
+    }
+    return 0;
+  }
 
 }
 

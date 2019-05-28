@@ -11,6 +11,7 @@ public final class TripStageProjection {
         int     getId();
         Float getLat();
         Float getLon();
+        int getOrd();
     }
 
     @Projection(name = "tripStageFull", types = {merotracker.model.TripStage.class})

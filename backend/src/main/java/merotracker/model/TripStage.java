@@ -20,11 +20,14 @@ public class TripStage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "lat", nullable = true, precision = 0)
+    @Column(name = "lat", nullable = false, precision = 0)
     private Float lat;
 
-    @Column(name = "lon", nullable = true, precision = 0)
+    @Column(name = "lon", nullable = false, precision = 0)
     private Float lon;
+
+    @Column(name = "ord")
+    private int ord;
 
     @ManyToOne(targetEntity = Trip.class, cascade = {CascadeType.DETACH})
     @JoinColumn(name = "ref_trip")

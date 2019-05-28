@@ -10,6 +10,7 @@ import { isNgTemplate } from '@angular/compiler';
 import { TripStageService, TripStage } from '../../../@core/data/models/tripstage';
 import { Observable } from 'rxjs';
 import { Vehicle, VehicleService } from '../../../@core/data/models/vehicle';
+import { MapboxService } from '../../../@core/data/mapboxService.service';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class MaproutingdialogComponent implements OnInit {
     protected tripservice: TripService,
     protected tripstageservice: TripStageService,
     protected vehicleService: VehicleService,
+    protected mapboxService: MapboxService,
   ) {
 
    }
@@ -48,20 +50,23 @@ export class MaproutingdialogComponent implements OnInit {
       this.waypoints = [L.latLng(39.012039, -3.366161)];
     } else {
       this.waypoints = [];
+      this.currentTr.stages = this.currentTr.stages.sort( TripStage.compare );
       for (let i = 0; i < this.item.stages.length ; i++) {
         let stage = this.item.stages[i];
         this.waypoints.push(L.latLng(stage.lat, stage.lon));
       }
+      console.debug(this.waypoints);
     }
   }
 
   protected map: L.map;
+  protected control;
 
   onMapReady(map: L.Map) {
     this.map = map;
 
     L.Icon.Default.imagePath = '/assets/img/markers/';
-    var control = L.Routing.control({
+    this.control = L.Routing.control({
       waypoints: this.waypoints,
       geocoder: L.Control.Geocoder.nominatim(),
       router: L.Routing.mapbox(this.mapboxapikey, {language: 'es'}),
@@ -88,12 +93,12 @@ export class MaproutingdialogComponent implements OnInit {
       container.setAttribute('class', 'btn-group btn-group-full-width');
 
       L.DomEvent.on(startBtn, 'click', function() {
-        control.spliceWaypoints(0, 1, e.latlng);
+        this.control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
       });
 
       L.DomEvent.on(destBtn, 'click', function() {
-        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
+        this.control.spliceWaypoints(this.control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
       });
 
@@ -133,7 +138,32 @@ export class MaproutingdialogComponent implements OnInit {
     return btn;
   }
 
-  protected onSubmit(event){
+  protected onOptimize(event) {
+    if (this.waypoints.length <=2){
+      window.alert("La ruta es demasiado simple");
+    } else if (this.waypoints.length > 10){
+      window.alert("La ruta es demasiado compleja");
+    } else {
+      if (window.confirm("Esto cambiará la ruta.\nEsta operacion es irreversible.")){
+        this.mapboxService.optimizeRoute(this.waypoints).subscribe(
+          res => {
+            let received = res.waypoints;
+            received = received.sort(MapboxService.compareReceivedWaypoint);
+
+            this.waypoints = [];
+            for (let i = 0; i<received.length; i++) {
+              this.waypoints.push(L.latLng(received[i].location[1], received[i].location[0]));
+              this.waypoints.sort
+              this.control.setWaypoints(this.waypoints);
+            }
+          }
+        )
+      }
+    }
+  }
+
+
+  protected onSubmit(event) {
     if ( this.waypoints.length >= 2 ) {
       if (this.currentTr.id != null) {
         this.deleteprevious([...this.currentTr.stages]);
@@ -167,10 +197,10 @@ export class MaproutingdialogComponent implements OnInit {
   }
 
   protected insertStages (t: Trip) {
-    this.waypoints.forEach( stage => {
-      let ts: TripStage = new TripStage(null,stage.latLng.lat,stage.latLng.lng,t);
+    for ( let i = 0 ; i < this.waypoints.length ; i++) {
+      let ts: TripStage = new TripStage(null,this.waypoints[i].latLng.lat,this.waypoints[i].latLng.lng,t,(i+1));
       this.tripstageservice.create(ts).subscribe( res => {} );
-    } );
+    }
   }
 
 }

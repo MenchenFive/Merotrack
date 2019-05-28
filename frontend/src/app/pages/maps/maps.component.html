@@ -24,6 +24,7 @@
     <div class="col-sm-2 my-3" *ngIf="peRadio.value== 'story'"><p-autoComplete
       #peAutocompleter="ngModel"
       [forceSelection]="true"
+      required
       [inputStyleClass]="(peAutocompleter.invalid && (peAutocompleter.dirty || peAutocompleter.touched || peForm.submitted)) ? 'form-control-danger form-control' : 'form-control' "
       class="col-sm-3"
       name="vehicle"

@@ -127,17 +127,21 @@ export class MapsComponent {
     .subscribe(
       res => {
         this.layerGroup.clearLayers();
-        var group = []
+        var group = [];
 
-        res = this.interpolatePositions(res, Math.min(95,res.length));
+        this.splitArrayByDate(res).forEach(
+         day => {
+            let dayPositions = this.interpolatePositions(day, Math.min(95, day.length));
 
-        this.mapboxService.snapToRoads(res).subscribe(
-          res => {
-            this.drawPathLine(res.matchings);
+            this.mapboxService.snapToRoads(dayPositions).subscribe(
+              data => {
+                this.drawPathLine(data.matchings);
+              }
+            );
           }
         );
 
-        res.forEach( pos => {
+        res.forEach(pos => {
           let marker = L.marker([pos.lat, pos.lon], {
             icon: this.getIcon(),
             rotationAngle: pos.course,
@@ -159,6 +163,26 @@ export class MapsComponent {
     );
   }
 
+  private getDate(date): string {
+    let ret = date.toString().split('T')[0];
+    return ret;
+  }
+
+  protected splitArrayByDate(input: Position[]): Array<Position[]> {
+    let dayArrays: Array<Position[]> = [];
+    let currentDate = '';
+    let currentDayIndex: number = -1
+
+    for (let i = 0; i < input.length; i++) {
+      if (currentDate != this.getDate(input[0].date)){
+        dayArrays.push([]); currentDayIndex++; currentDate=this.getDate(input[0].date);
+      }
+      dayArrays[currentDayIndex].push(input[i]);
+    }
+
+    return dayArrays;
+  }
+
   protected drawPathLine(matchings) {
     let maxGeom = matchings[0];
     for (let ixj = 0 ; ixj < matchings.length ; ixj++) {
@@ -166,15 +190,17 @@ export class MapsComponent {
         maxGeom = matchings[ixj];
       }
     }
-    L.polyline(polyline.decode(maxGeom.geometry, 6), {color: 'blue'}).addTo(this.layerGroup);
+    L.polyline(polyline.decode(maxGeom.geometry, 6), {color:
+        '#'+(Math.random()*0xFFFFFF<<0).toString(16)
+      }).addTo(this.layerGroup);
   }
 
   protected getIcon(){
     return L.icon({
       iconUrl: '/assets/images/markerArrow.png',
-      iconSize:     [40, 40], // size of the icon
-      iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
-      popupAnchor:  [-80, 0] // point from which the popup should open relative to the iconAnchor
+      iconSize:     [40, 40],
+      iconAnchor:   [20, 20],
+      popupAnchor:  [-80, 0]
   });
   }
 
@@ -202,7 +228,7 @@ export class MapsComponent {
       let after = Math.ceil(tmp);
       let atPoint = tmp - before;
       newData[i] = this.linearInterpolate(data[before], data[after], atPoint);
-      }
+    }
     newData[fitCount - 1] = data[data.length - 1];
     //console.debug(newData);
     return newData;
