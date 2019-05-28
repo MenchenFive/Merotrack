@@ -1,1 +1,43 @@
+<form #peForm="ngForm" (ngSubmit)="(peForm.valid) ? [onbutton(peForm.value),peForm.resetForm()] : null">
+<div class=container>
+  <div class="row">
+      <div [(ngModel)]="radioSelection" (change)="onchange($event)" [ngModelOptions]="{standalone:true}" ngbRadioGroup #peRadio="ngModel"
+      style="max-height:3.2rem;"
+      class="col-sm-4 my-3 btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+         <label ngbButtonLabel class="btn btn-outline-primary">
+           <input ngbButton type=radio value="fleet"> Toda la flota
+         </label>
+         <label ngbButtonLabel class="btn btn-outline-primary">
+           <input ngbButton type=radio value="story"> Histórico 1 vehículo
+         </label>
+    </div>
+    <div class="col-sm-2 my-3" *ngIf="peRadio.value == 'story'">
+        <input name="datestart" class="form-control " nbInput placeholder="Desde" [nbDatepicker]="pickerStart" [(ngModel)]="dateStart" #peDateStart="ngModel" [ngClass]="{'form-control-danger': peDateStart.invalid && (peDateStart.dirty || peDateStart.touched || peForm.submitted)}">
+        <nb-datepicker #pickerStart [max]="(dateEnd)?dateEnd:today" ></nb-datepicker>
+
+      </div>
+      <div class="col-sm-2 my-3" *ngIf="peRadio.value== 'story'">
+        <input name="dateend" class="form-control" nbInput placeholder="Hasta" [nbDatepicker]="pickerEnd" [(ngModel)]="dateEnd" #peDateEnd="ngModel" [ngClass]="{'form-control-danger': peDateEnd.invalid && (peDateEnd.dirty || peDateEnd.touched || peForm.submitted)}">
+        <nb-datepicker #pickerEnd   [min]="(dateStart)?dateStart:null" [max]=today></nb-datepicker>
+      </div>
+
+    <div class="col-sm-2 my-3" *ngIf="peRadio.value== 'story'"><p-autoComplete
+      #peAutocompleter="ngModel"
+      [forceSelection]="true"
+      [inputStyleClass]="(peAutocompleter.invalid && (peAutocompleter.dirty || peAutocompleter.touched || peForm.submitted)) ? 'form-control-danger form-control' : 'form-control' "
+      class="col-sm-3"
+      name="vehicle"
+      [(ngModel)]="currentVehicle"
+      [suggestions]="vehicleResults | async"
+      (completeMethod)="search($event)"
+      field="plate"
+      placeholder="Vehiculo (matricula)"
+    ></p-autoComplete></div>
+    <div class="col-sm-1 my-3 " *ngIf="peRadio.value== 'story'">
+      <button type=submit class="btn btn-primary w-100"  nbButton shape="rectangle"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</div>
+</form>
+
 <div leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>

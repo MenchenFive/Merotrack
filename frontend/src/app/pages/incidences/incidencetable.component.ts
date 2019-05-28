@@ -39,6 +39,7 @@ export class IncidenceTableComponent implements OnInit {
     this.source.setSort([{ field: 'dateStart', direction: 'desc' }], true);
   }
 
+
   ngOnInit(): void {
     this.sortByDateFrom();
   }

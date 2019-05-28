@@ -46,6 +46,7 @@
     "@angular/platform-browser-dynamic": "^7.2.11",
     "@angular/router": "^7.2.11",
     "@asymmetrik/ngx-leaflet": "5.0.2",
+    "@mapbox/polyline": "^1.1.0",
     "@nebular/auth": "3.4.2",
     "@nebular/bootstrap": "3.4.2",
     "@nebular/date-fns": "^3.5.0",

@@ -152,6 +152,7 @@ export class MaproutingdialogComponent implements OnInit {
           }
         );
       }
+      this.onComplete.emit(true);
     } else {
       window.alert( 'Seleccione al menos dos puntos' );
     }
