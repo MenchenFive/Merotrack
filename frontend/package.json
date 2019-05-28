@@ -69,6 +69,7 @@
     "ionicons": "2.0.1",
     "leaflet": "1.5.1",
     "leaflet-control-geocoder": "^1.7.0",
+    "leaflet-moving-rotated-marker": "0.0.1",
     "leaflet-routing-machine": "3.2.12",
     "md-date-range-picker": "^0.8.4",
     "mydaterangepicker": "^4.2.1",

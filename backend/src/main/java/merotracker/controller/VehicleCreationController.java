@@ -15,7 +15,6 @@ import java.util.Random;
 
 
 @RepositoryRestController
-//@RequestMapping(value = "/vehicles")
 public class VehicleCreationController {
 
     private final static Logger logger = LoggerFactory.getLogger(VehicleCreationController.class);
@@ -29,6 +28,7 @@ public class VehicleCreationController {
     // hash: lat, lon, date, public, private
     @PostMapping("/vehicles")
     public ResponseEntity<?> create (@RequestBody Vehicle v) {
+        System.out.println("pingas!");
         v.setPrivateId(generateRandomString());
         v.setPublicId(generateRandomString());
         return ResponseEntity.ok(vehicleRepository.save(v));

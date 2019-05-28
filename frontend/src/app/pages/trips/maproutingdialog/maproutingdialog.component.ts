@@ -67,6 +67,13 @@ export class MaproutingdialogComponent implements OnInit {
       router: L.Routing.mapbox(this.mapboxapikey, {language: 'es'}),
       language: 'es',
       showAlternatives: true,
+      altLineOptions: {
+        styles: [
+          {color: 'black', opacity: 0.15, weight: 9},
+          {color: 'white', opacity: 0.8, weight: 6},
+          {color: 'blue', opacity: 0.5, weight: 2},
+        ]
+      }
     })
     .on('routeselected', (e) => {
       var route = e.route;

@@ -2,15 +2,21 @@ package merotracker.controller;
 
 import merotracker.model.Vehicle;
 import merotracker.model.VehiclePosition;
+import merotracker.model.projections.VehiclePositionProjection;
 import merotracker.repository.VehiclePositionRepository;
 import merotracker.repository.VehicleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.ResourceAssembler;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +26,9 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @RepositoryRestController
@@ -32,11 +40,16 @@ public class VehiclePositionController {
     private VehiclePositionRepository repository;
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private ProjectionFactory factory;
+    @Autowired
+    private ResourceAssembler<VehiclePosition, Resource<VehiclePosition>> assembler;
+
 
     // example: ?latitude=3859.795314&longitude=-355.488458&altitude=689&time=20190504230523&satellites=14&speedOTG=&course=335.180481&vehicle=OraP37mHQ6SX4ZQP&sum=fbc2a37cf2bb19ef8c6d739682de7a4a
     // hash: lat, lon, date, public, private
-    @GetMapping("/vehiclepositions/arduino")
-    public ResponseEntity<?> create (
+    @GetMapping("/vehiclePositions/arduino")
+    public @ResponseBody  ResponseEntity<?> create (
 
             @RequestParam String latitude,
             @RequestParam String longitude,
@@ -102,6 +115,46 @@ public class VehiclePositionController {
             val = 0 - val;
 
         return val;
+    }
+
+    @GetMapping("/vehiclePositions/search/getLastOfEach")
+    public ResponseEntity<?> getLastOfEach () {
+
+        List<VehiclePosition> found = repository.getLastPositionOfEachVehicle();
+
+        List<Resource<VehiclePositionProjection.full>> resources = new ArrayList<>();
+
+        found.forEach( item ->  {
+            Resource c = new Resource<>(factory.createProjection(VehiclePositionProjection.full.class, item));
+            resources.add(c);
+        });
+
+        Resources<Resource<VehiclePositionProjection.full>> res = new Resources<>(resources);
+
+        return ResponseEntity.ok().body(res);
+
+    }
+
+    @GetMapping("/vehiclePositions/search/getPeriod")
+    public ResponseEntity<?> getPeriod (
+            @RequestParam("dateStart")    Date dateStart,
+            @RequestParam("dateEnd")    Date dateEnd,
+            @RequestParam("vehicleId")    Integer vehicleId
+    ) {
+
+        List<VehiclePosition> found = repository.findAllByVehicleIdAndDateBetween(vehicleId, dateStart, dateEnd);
+
+        List<Resource<VehiclePositionProjection.full>> resources = new ArrayList<>();
+
+        found.forEach( item ->  {
+            Resource c = new Resource<>(factory.createProjection(VehiclePositionProjection.full.class, item));
+            resources.add(c);
+        });
+
+        Resources<Resource<VehiclePositionProjection.full>> res = new Resources<>(resources);
+
+        return ResponseEntity.ok().body(res);
+
     }
 
 }

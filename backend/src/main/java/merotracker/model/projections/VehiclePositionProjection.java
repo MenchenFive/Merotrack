@@ -1,6 +1,5 @@
 package merotracker.model.projections;
 
-import merotracker.model.Vehicle;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
@@ -22,7 +21,7 @@ public final class VehiclePositionProjection {
 
     @Projection(name = "positionFull", types = {merotracker.model.VehiclePosition.class})
     public interface full extends noVehicle {
-        Vehicle getVehicle();
+        VehicleProjections.summary getVehicle();
     }
 
 
