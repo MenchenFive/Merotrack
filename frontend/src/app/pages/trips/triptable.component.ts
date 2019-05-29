@@ -1,6 +1,6 @@
 import { Component, OnInit, ɵConsole, TemplateRef, ViewChild } from '@angular/core';
 import { Vehicle, VehicleService } from '../../@core/data/models/vehicle';
-import { NbDateService, NbDialogService } from '@nebular/theme';
+import { NbDateService, NbDialogService, NbDialogRef } from '@nebular/theme';
 import { IncidenceService, VehicleIncidencesTableServerDataSource, Incidence } from '../../@core/data/models/incidence';
 import { Observable } from 'rxjs';
 import { ElipsisPipe } from '../../@core/data/pipes/elipsis.pipe';
@@ -29,7 +29,7 @@ export class TripTableComponent implements OnInit {
     protected tripStageService: TripStageService,
     protected source: TripTableServerDataSource,
     protected dateService: NbDateService<Date>,
-    private dialogService: NbDialogService,
+    protected dialogService: NbDialogService,
   ) {
   }
 
@@ -43,8 +43,9 @@ export class TripTableComponent implements OnInit {
 
   onDelete(event): void {
     if (window.confirm('Deseas eliminar el viaje?\nEsta acción es irreversible')) {
-      this.tripService.delete(event.data).subscribe( res => this.source.refresh() );
-
+      this.tripService.delete(event.data).subscribe( res => {
+        this.source.refresh();
+      } );
     }
   }
 
@@ -53,17 +54,25 @@ export class TripTableComponent implements OnInit {
       context: {
         item: Trip.newNull(),
       },
-    });
+    }).onClose.subscribe(
+      event => {
+        this.source.refresh();
+      }
+    );
   }
 
   onEditTable(event): void{
     this.tripService.get(event.data.id,[{key:"projection",value:"tripFull"}]).subscribe( res => {
-      this.dialogService.open(MaproutingdialogComponent, {
+      let ref = this.dialogService.open(MaproutingdialogComponent, {
         context: {
           item: res,
         },
-      });
-    })
+      }).onClose.subscribe(
+        event => {
+          this.source.refresh();
+        }
+      )
+    });
   }
 
   settings = {

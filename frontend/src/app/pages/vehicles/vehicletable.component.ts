@@ -65,7 +65,12 @@ export class VehicleTableComponent {
 
   onDelete(event): void {
     if (window.confirm('Deseas eliminar el vehículo?')) {
-      //this.incidenceService.delete(event.data);
+      this.vehicleService.delete(event.data).subscribe(
+        res => {
+          this.source.refresh();
+        }
+      );
+      this.onButtonCancel(event);
     }
   }
 

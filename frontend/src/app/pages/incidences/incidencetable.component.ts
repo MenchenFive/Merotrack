@@ -85,7 +85,8 @@ export class IncidenceTableComponent implements OnInit {
 
   onDelete(event): void {
     if (window.confirm('Deseas eliminar la incidencia?')) {
-      this.incidenceService.delete(event.data);
+      this.incidenceService.delete(event.data).subscribe( res => this.source.refresh() );
+      this.onButtonCancel(event);
     }
   }
 

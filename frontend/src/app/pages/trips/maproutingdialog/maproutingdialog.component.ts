@@ -4,7 +4,7 @@ import 'style-loader!leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder';
 import 'leaflet/dist/images/marker-icon.png';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { Trip, TripService } from '../../../@core/data/models/trip';
 import { isNgTemplate } from '@angular/compiler';
 import { TripStageService, TripStage } from '../../../@core/data/models/tripstage';
@@ -27,8 +27,6 @@ export class MaproutingdialogComponent implements OnInit {
 
   protected vehicleResults:   Observable<Vehicle[]>;
 
-  @Output() onComplete: EventEmitter<any> = new EventEmitter();
-
   @Input() item: Trip;
 
   protected waypoints: Array<any>;
@@ -39,6 +37,7 @@ export class MaproutingdialogComponent implements OnInit {
     protected tripstageservice: TripStageService,
     protected vehicleService: VehicleService,
     protected mapboxService: MapboxService,
+    protected dialogRef: NbDialogRef<MaproutingdialogComponent>
   ) {
 
    }
@@ -66,7 +65,7 @@ export class MaproutingdialogComponent implements OnInit {
     this.map = map;
 
     L.Icon.Default.imagePath = '/assets/img/markers/';
-    this.control = L.Routing.control({
+    let control = L.Routing.control({
       waypoints: this.waypoints,
       geocoder: L.Control.Geocoder.nominatim(),
       router: L.Routing.mapbox(this.mapboxapikey, {language: 'es'}),
@@ -93,12 +92,12 @@ export class MaproutingdialogComponent implements OnInit {
       container.setAttribute('class', 'btn-group btn-group-full-width');
 
       L.DomEvent.on(startBtn, 'click', function() {
-        this.control.spliceWaypoints(0, 1, e.latlng);
+        control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
       });
 
       L.DomEvent.on(destBtn, 'click', function() {
-        this.control.spliceWaypoints(this.control.getWaypoints().length - 1, 1, e.latlng);
+        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
       });
 
@@ -107,6 +106,8 @@ export class MaproutingdialogComponent implements OnInit {
           .setLatLng(e.latlng)
           .openOn(map);
     })
+
+    this.control = control;
   }
 
   search(event) {
@@ -182,7 +183,7 @@ export class MaproutingdialogComponent implements OnInit {
           }
         );
       }
-      this.onComplete.emit(true);
+      this.dialogRef.close();
     } else {
       window.alert( 'Seleccione al menos dos puntos' );
     }
