@@ -1,23 +1,19 @@
-package com.autentia.demo.jwt.security;
+package merotracker.security;
 
-import static com.autentia.demo.jwt.security.Constants.HEADER_AUTHORIZACION_KEY;
-import static com.autentia.demo.jwt.security.Constants.SUPER_SECRET_KEY;
-import static com.autentia.demo.jwt.security.Constants.TOKEN_BEARER_PREFIX;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import io.jsonwebtoken.Jwts;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static merotracker.security.Constants.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 

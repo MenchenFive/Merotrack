@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"rol"})
+@EqualsAndHashCode()
 @Table(name = "users", schema = "public")
 public class User {
 
@@ -20,19 +20,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name", nullable = false, length = 32)
+    @Column(name = "name", nullable = false, length = 60)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 40)
+    @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 32)
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @Column(name = "salt", nullable = false, length = 8)
-    private String salt;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @ManyToOne(targetEntity = UserRole.class)
-    @JoinColumn(name = "ref_role")
-    private UserRole rol;
+}
+
+
+enum Role {
+    ADMIN,
+    STANDARD,
 }

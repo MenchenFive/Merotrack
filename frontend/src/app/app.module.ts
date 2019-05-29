@@ -17,6 +17,7 @@ import { AngularHalModule } from 'angular4-hal';
 import { ExternalConfigurationService } from './ExternalConfigurationService';
 import { PipesModule } from './@core/data/pipes/pipes.module';
 import { NbDialogModule } from '@nebular/theme';
+import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,23 @@ import { NbDialogModule } from '@nebular/theme';
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
     PipesModule,
+    NbAuthModule.forRoot({
+      strategies: [
+        NbPasswordAuthStrategy.setup({
+          name: 'email',
+          token: {
+            class: NbAuthJWTToken,
+          },
+          baseEndpoint: 'http://localhost:8090',
+          login: {
+            // ...
+            endpoint: '/login',
+            method: 'post',
+          },
+        }),
+      ],
+      forms: {},
+    }),
   ],
   bootstrap: [AppComponent],
   providers: [

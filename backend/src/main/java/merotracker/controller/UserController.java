@@ -1,30 +1,36 @@
-package merotracker.security.user;
+package merotracker.controller;
 
-//@RestController
-/*public class UsuarioController {
+import merotracker.model.User;
+import merotracker.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-	private UsuarioRepository usuarioRepository;
+@RepositoryRestController
+@CrossOrigin
+public class UserController {
 
+    @Autowired
+	private UserRepository repo;
+    @Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public UsuarioController(UsuarioRepository usuarioRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-		this.usuarioRepository = usuarioRepository;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	}
-
-	@PostMapping("/users/")
-	public void saveUsuario(@RequestBody Usuario user) {
+	@PostMapping("/users")
+	public void saveUsuario(@RequestBody User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		usuarioRepository.save(user);
+		repo.save(user);
 	}
 
-	@GetMapping("/users/")
-	public List<Usuario> getAllUsuarios() {
-		return usuarioRepository.findAll();
+	/*@GetMapping("/users/")
+	public List<User> getAllUsuarios() {
+		return repo.findAll();
 	}
 
 	@GetMapping("/users/{username}")
-	public Usuario getUsuario(@PathVariable String username) {
-		return usuarioRepository.findByUsername(username);
-	}
-}*/
+	public User getUsuario(@PathVariable String username) {
+		return repo.findByEmail(username);
+	}*/
+}

@@ -23,26 +23,26 @@ const routes: Routes = [
         path: 'login',
         component: NbLoginComponent,
       },
-      {
+      /*{
         path: 'register',
         component: NbRegisterComponent,
-      },
+      },*/
       {
         path: 'logout',
         component: NbLogoutComponent,
       },
-      {
+      /*{
         path: 'request-password',
         component: NbRequestPasswordComponent,
-      },
-      {
+      },*/
+      /*{
         path: 'reset-password',
         component: NbResetPasswordComponent,
-      },
+      },*/
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '', redirectTo: 'pages', pathMatch: 'full' }, // !!!!! QUIZÁ HAYA QUE QUITAR ESTO
+  { path: '**', redirectTo: 'pages' },                  // !!!!!
 ];
 
 const config: ExtraOptions = {

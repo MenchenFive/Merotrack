@@ -1,6 +1,4 @@
-package com.autentia.demo.jwt.security;
-
-import static com.autentia.demo.jwt.security.Constants.LOGIN_URL;
+package merotracker.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static merotracker.security.Constants.LOGIN_URL;
 
 @Configuration
 @EnableWebSecurity
@@ -33,26 +33,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		/*
-		 * 1. Se desactiva el uso de cookies
-		 * 2. Se activa la configuración CORS con los valores por defecto
-		 * 3. Se desactiva el filtro CSRF
-		 * 4. Se indica que el login no requiere autenticación
-		 * 5. Se indica que el resto de URLs esten securizadas
-		 */
 		httpSecurity
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.cors().and()
-			.csrf().disable()
-			.authorizeRequests().antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
-			.anyRequest().authenticated().and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() 	// No cookies
+			.cors().and()																		// Enabled, default CORS
+			.csrf().disable()																	// Disabled CSRF Filter
+			.authorizeRequests().antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()// Login URL doesnt need auth
+				.antMatchers(HttpMethod.POST,"/users").permitAll()
+			.anyRequest().authenticated().and()													// Rest of URLS in API require auth
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager()));
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// Se define la clase que recupera los usuarios y el algoritmo para procesar las passwords
+		// Class that retrieves Users and password decrypt algorithm
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 

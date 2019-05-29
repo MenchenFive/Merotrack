@@ -1,20 +1,24 @@
-package merotracker.security.user;
+package merotracker.security;
 
-//@Service
-/*public class UsuarioDetailsServiceImpl implements UserDetailsService {
+import merotracker.model.User;
+import merotracker.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-	private UsuarioRepository usuarioRepository;
+import static java.util.Collections.emptyList;
 
-	public UsuarioDetailsServiceImpl(UsuarioRepository usuarioRepository) {
-		this.usuarioRepository = usuarioRepository;
-	}
+@Service
+public class UsuarioDetailsServiceImpl implements UserDetailsService {
+
+    @Autowired
+	private UserRepository repo;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = usuarioRepository.findByUsername(username);
-		if (usuario == null) {
-			throw new UsernameNotFoundException(username);
-		}
-		return new User(usuario.getUsername(), usuario.getPassword(), emptyList());
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User u = repo.findByEmail(email).orElseThrow( () -> new UsernameNotFoundException(email) );
+        return new org.springframework.security.core.userdetails.User(u.getEmail(), u.getPassword(), emptyList());
 	}
-}*/
+}
