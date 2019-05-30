@@ -32,9 +32,12 @@ public class User {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    enum Role {
+        admin,
+        standard,
+    }
+
 }
 
-enum Role {
-    admin,
-    standard,
-}
+

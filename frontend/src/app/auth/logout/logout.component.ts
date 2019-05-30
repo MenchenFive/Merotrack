@@ -17,11 +17,12 @@ import { NbMenuItem } from '@nebular/theme';
 @Component({
   selector: 'nb-logout',
   templateUrl: './logout.component.html',
+  styles: ['/deep/ nb-auth nb-card-header { display: none !important; }'],
 })
 export class NbLogoutComponent implements OnInit {
 
   redirectDelay: number = 0;
-  strategy: string = '';
+  strategy: string = 'email';
 
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},

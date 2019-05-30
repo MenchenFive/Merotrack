@@ -51,6 +51,18 @@ export const NB_CORE_PROVIDERS = [
         login: {
           endpoint: '/login',
           method: 'post',
+          requireValidToken: true,
+          redirect: {
+            success: '/pages',
+          },
+        },
+        logout: {
+          endpoint: '',
+          method: 'post',
+          redirect: {
+              success: '/',
+              failure: '/',
+          },
         },
       }),
     ],

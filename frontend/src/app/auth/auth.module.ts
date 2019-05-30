@@ -10,7 +10,6 @@ import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule } from '
 import { NbLoginComponent } from './login/login.component';
 import { NbLogoutComponent } from './logout/logout.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
