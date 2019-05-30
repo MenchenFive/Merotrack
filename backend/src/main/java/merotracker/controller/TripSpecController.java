@@ -1,9 +1,9 @@
 package merotracker.controller;
 
-import merotracker.model.User;
-import merotracker.model.projections.UserProjection;
-import merotracker.repository.UserRepository;
-import merotracker.specification.UserSpecifications;
+import merotracker.model.Trip;
+import merotracker.model.projections.TripProjection;
+import merotracker.repository.TripRepository;
+import merotracker.specification.TripSpecificatinos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,36 +22,36 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RepositoryRestController
-public class UserSpecController {
+public class TripSpecController {
 
     @Autowired
-    private UserRepository repo;
+    private TripRepository repo;
 
     @Autowired
-    private PagedResourcesAssembler<UserProjection.noPassword> assembler;
+    private PagedResourcesAssembler<TripProjection.withVehicle> assembler;
 
     @Autowired
     private ProjectionFactory factory;
 
-    @GetMapping(value = "/users/specificationquery")
+    @GetMapping(value = "/trips/specificationquery")
     public @ResponseBody
     ResponseEntity<?> getAdresss(
             Pageable pageable,
-            @RequestParam(value = "email" , required = false) String email,
-            @RequestParam(value = "name" , required = false) String name
+            @RequestParam(value = "vehicle" , required = false) String vehicle,
+            @RequestParam(value = "description" , required = false) String description
     ) {
-        Specification<User> spec = UserSpecifications.chainedSpecification(email,name);
+        Specification<Trip> spec = TripSpecificatinos.chainedSpecification(description,vehicle);
 
-        Page<User> found = repo.findAll(spec, pageable);
+        Page<Trip> found = repo.findAll(spec, pageable);
 
-        Page<UserProjection.noPassword> projected = found.map(l -> factory.createProjection(UserProjection.noPassword.class, l));
+        Page<TripProjection.withVehicle> projected = found.map(l -> factory.createProjection(TripProjection.withVehicle.class, l));
 
-        PagedResources<Resource<UserProjection.noPassword>> resources = assembler.toResource(projected);
+        PagedResources<Resource<TripProjection.withVehicle>> resources = assembler.toResource(projected);
 
-        resources.add(linkTo(methodOn(UserSpecController.class).getAdresss(
+        resources.add(linkTo(methodOn(TripSpecController.class).getAdresss(
                 pageable,
-                email,
-                name
+                vehicle,
+                description
         )).withSelfRel());
 
         return ResponseEntity.ok(resources);

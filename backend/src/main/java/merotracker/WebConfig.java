@@ -16,11 +16,6 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
- 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -37,4 +32,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public SpelAwareProxyProjectionFactory projectionFactory() { return new SpelAwareProxyProjectionFactory(); }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedOrigins("*")
+                .allowedHeaders("*")
+                .exposedHeaders("Location", "Access-Control-Allow-Origin");
+    }
 }

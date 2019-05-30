@@ -1,31 +1,31 @@
 package merotracker.specification;
 
-import merotracker.model.User;
+import merotracker.model.Trip;
 import org.springframework.data.jpa.domain.Specification;
 
-public class UserSpecifications {
+public class TripSpecificatinos {
 
-    public static Specification<User> chainedSpecification(
+    public static Specification<Trip> chainedSpecification(
             String title,
             String vehiclePlate
     ){
-        Specification<User> spec = Specification.where(null);
+        Specification<Trip> spec = Specification.where(null);
 
         if(title!=null)
-            spec = spec.and(hasName(title));
+            spec = spec.and(hasTitle(title));
 
         if(vehiclePlate!=null)
-            spec = spec.and(hasEmail(vehiclePlate));
+            spec = spec.and(hasPlate(vehiclePlate));
 
         return spec;
 
     }
 
-    public static Specification<User> hasName(String t) {
-        return (Specification<User>) (root, cq, cb) -> cb.like(cb.lower(root.get("name")), wildLow(t));
+    public static Specification<Trip> hasTitle(String t) {
+        return (Specification<Trip>) (root, cq, cb) -> cb.like(cb.lower(root.get("description")), wildLow(t));
     }
-    public static Specification<User> hasEmail(String t) {
-        return (Specification<User>) (root, cq, cb) -> cb.like(cb.lower(root.get("name")), wildLow(t));
+    public static Specification<Trip> hasPlate(String t) {
+        return (Specification<Trip>) (root, cq, cb) -> cb.like(cb.lower(root.join("vehicle").get("plate")), wildLow(t));
     }
 
     public static String wildLow(String param){

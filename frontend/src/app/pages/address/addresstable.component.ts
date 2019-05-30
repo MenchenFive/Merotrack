@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDateService } from '@nebular/theme';
 
-import { Incidence } from '../../@core/data/models/incidence';
-import { Vehicle, VehicleService, VehicleTableServerDataSource } from '../../@core/data/models/vehicle';
+import { User, UserTableServerDataSource, UserService } from '../../@core/data/models/user';
 
 @Component({
   selector: 'ngx-address-table',
@@ -15,63 +14,48 @@ export class AddressTableComponent {
   protected DATEFORMAT = 'dd/MM/yyyy';
   protected PLATEREGEX = '([0-9]{4}[A-Za-z]{3})|([A-Za-z]{1,2}[0-9]{4}[A-Za-z]{1,2})';
 
-  protected currentVeEdit:  Vehicle = null;
-  protected currentVe:      Vehicle = Incidence.newNull();
+  protected currentVe:      User = User.newNull();
+
+  protected isAdmin: boolean = false;
 
   constructor(
-    protected vehicleService: VehicleService,
-    protected dateService: NbDateService<Date>,
-    protected source: VehicleTableServerDataSource,
+    protected userService: UserService,
+    protected source: UserTableServerDataSource,
   ) {
-    this.today = this.dateService.today();
     this.refreshTable();
   }
-
   refreshTable(): void {
     this.source.refresh();
   }
 
-  onSubmit(event) {
-    this.form2table();
-    this.onButtonCancel(null);
+  sortByDateFrom() {
+    this.source.setSort([{ field: 'email', direction: 'desc' }], true);
   }
 
-  onButtonCancel(event) {
-    this.currentVeEdit = null;
-    this.currentVe = Incidence.newNull();
+
+  ngOnInit(): void {
+    this.sortByDateFrom();
+  }
+
+  onSubmit(event) {
+    console.debug("isadmin: "+this.isAdmin);
+    this.form2table();
   }
 
   form2table() {
-    if (this.currentVeEdit) {
-      this.vehicleService.patch(this.currentVe).subscribe(
-        res => { this.refreshTable(); }
+    this.currentVe.role = (this.isAdmin) ? 'admin' : 'standard';
+      this.userService.create(this.currentVe).subscribe(
+        res => {
+          this.refreshTable();
+          this.isAdmin=false;
+        }
       );
-    }else{
-      this.vehicleService.create(this.currentVe).subscribe(
-        res => { this.refreshTable(); }
-      );
-    }
-  }
-
-  table2form(tabledata: any) {
-    if (typeof tabledata.dateStart === 'string') {
-      tabledata.dateStart = this.dateService.parse(tabledata.dateStart, this.DATEFORMAT);
-      tabledata.dateEnd = this.dateService.parse(tabledata.dateEnd, this.DATEFORMAT);
-    }
-    this.currentVeEdit = tabledata;
-    this.currentVe = tabledata;
   }
 
   onDelete(event): void {
-    if (window.confirm('Deseas eliminar el vehículo?')) {
-      //this.incidenceService.delete(event.data);
+    if (window.confirm('Deseas eliminar el usuario?')) {
+      this.userService.delete(event.data).subscribe( res => this.source.refresh() );
     }
-  }
-
-  onEditTable(event) {
-    if(this.currentVeEdit)
-      this.onButtonCancel(null);
-    this.table2form(event.data);
   }
 
   settings = {
@@ -83,7 +67,7 @@ export class AddressTableComponent {
       perPage: 10, // Items per page
     },
     actions: {
-      edit: true,
+      edit: false,
       delete: true,
       add: false,
     },
@@ -101,16 +85,16 @@ export class AddressTableComponent {
       deleteButtonContent: '<i class="nb-trash"></i>',
     },
     columns: {
-      plate: {
-        title: 'Matricula',
+      name: {
+        title: 'Nombre',
         type: 'string',
       },
-      brand: {
-        title: 'Marca',
+      email: {
+        title: 'Correo',
         type: 'string',
       },
-      model: {
-        title: 'Modelo',
+      role: {
+        title: 'Rol',
         type: 'string',
       },
     },

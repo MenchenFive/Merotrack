@@ -86,7 +86,7 @@ export class VehicleTableComponent {
     noDataMessage: 'Sin vehiculos que cumplan los criterios de busqueda',
     pager: {
       display: true,
-      perPage: 10, // Items per page
+      perPage: 8, // Items per page
     },
     actions: {
       edit: true,

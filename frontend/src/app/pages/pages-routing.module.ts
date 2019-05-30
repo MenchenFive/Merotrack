@@ -38,7 +38,7 @@ const routes: Routes = [{
     {
       path: '',
       pathMatch: 'full',
-      component: MapsComponent,
+      component: TripTableComponent,
     },
     {
       path: '**',

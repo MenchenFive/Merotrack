@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	@PostMapping("/users/register")
+	@PostMapping("/users")
 	public ResponseEntity<?> saveUsuario(@RequestBody User user) {
 		System.out.println("REGISTER");
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

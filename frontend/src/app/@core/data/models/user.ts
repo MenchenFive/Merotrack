@@ -6,20 +6,21 @@ import { ExternalConfigurationService } from '../../../ExternalConfigurationServ
 
 const urlRoute = 'users';
 
+
 export class User extends Resource {
 
   constructor(
     public id?:                 number,
     public name?:               string,
     public email?:           string,
-    /*public password?:           string,
+    public password?:           string,
     public salt?:           string,
-    public rol?:              Rol,*/
+    public role?:              string,
   )
   { super(); }
 
   public static newNull(): User {
-    return new User(null,null,null);
+    return new User(null,null,null,null,null,null);
   }
 
 

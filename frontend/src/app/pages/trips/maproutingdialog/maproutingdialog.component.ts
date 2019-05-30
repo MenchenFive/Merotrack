@@ -66,6 +66,7 @@ export class MaproutingdialogComponent implements OnInit {
     L.Icon.Default.imagePath = '/assets/img/markers/';
     let control = L.Routing.control({
       waypoints: this.waypoints,
+      collapsible: true,
       geocoder: L.Control.Geocoder.nominatim(),
       router: L.Routing.mapbox(this.mapboxapikey, {language: 'es'}),
       language: 'es',

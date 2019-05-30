@@ -1,9 +1,9 @@
 package merotracker.controller;
 
-import merotracker.model.Adress;
-import merotracker.model.projections.AddressProjection;
-import merotracker.repository.AddressRepository;
-import merotracker.specification.AddressesSpecifications;
+import merotracker.model.User;
+import merotracker.model.projections.UserProjection;
+import merotracker.repository.UserRepository;
+import merotracker.specification.UserSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,33 +22,37 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RepositoryRestController
-public class AddressSpecController {
+public class UserSpecController {
 
     @Autowired
-    private AddressRepository repo;
+    private UserRepository repo;
 
     @Autowired
-    private PagedResourcesAssembler<AddressProjection.full> assembler;
+    private PagedResourcesAssembler<UserProjection.noPassword> assembler;
 
     @Autowired
     private ProjectionFactory factory;
 
-    @GetMapping(value = "/adresss/specificationquery")
+    @GetMapping(value = "/users/specificationquery")
     public @ResponseBody
     ResponseEntity<?> getAdresss(
             Pageable pageable,
+            @RequestParam(value = "email" , required = false) String email,
+            @RequestParam(value = "rol" , required = false) String rol,
             @RequestParam(value = "name" , required = false) String name
     ) {
-        Specification<Adress> spec = AddressesSpecifications.hasName(name);
+        Specification<User> spec = UserSpecifications.chainedSpecification(email,name,rol);
 
-        Page<Adress> found = repo.findAll(spec, pageable);
+        Page<User> found = repo.findAll(spec, pageable);
 
-        Page<AddressProjection.full> projected = found.map(l -> factory.createProjection(AddressProjection.full.class, l));
+        Page<UserProjection.noPassword> projected = found.map(l -> factory.createProjection(UserProjection.noPassword.class, l));
 
-        PagedResources<Resource<AddressProjection.full>> resources = assembler.toResource(projected);
+        PagedResources<Resource<UserProjection.noPassword>> resources = assembler.toResource(projected);
 
-        resources.add(linkTo(methodOn(AddressSpecController.class).getAdresss(
+        resources.add(linkTo(methodOn(UserSpecController.class).getAdresss(
                 pageable,
+                email,
+                rol,
                 name
         )).withSelfRel());
 
