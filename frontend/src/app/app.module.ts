@@ -7,7 +7,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -18,6 +18,10 @@ import { ExternalConfigurationService } from './ExternalConfigurationService';
 import { PipesModule } from './@core/data/pipes/pipes.module';
 import { NbDialogModule } from '@nebular/theme';
 import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
+import { NgxAuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth-guard.service';
+import { TokenInterceptor } from './auth/token.interceptor';
+import { NbSecurityModule } from '@nebular/security';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,29 +36,20 @@ import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/a
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
     PipesModule,
-    NbAuthModule.forRoot({
-      strategies: [
-        NbPasswordAuthStrategy.setup({
-          name: 'email',
-          token: {
-            class: NbAuthJWTToken,
-          },
-          baseEndpoint: 'http://localhost:8090',
-          login: {
-            // ...
-            endpoint: '/login',
-            method: 'post',
-          },
-        }),
-      ],
-      forms: {},
-    }),
+    NgxAuthModule,
   ],
   bootstrap: [AppComponent],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: 'ExternalConfigurationService', useClass: ExternalConfigurationService },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    AuthGuard,
   ],
 })
 export class AppModule {
+
 }

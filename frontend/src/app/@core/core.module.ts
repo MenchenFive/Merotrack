@@ -1,8 +1,8 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
+import { NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
-import { of as observableOf } from 'rxjs';
+import { of as observableOf, Observable } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import {
@@ -12,33 +12,27 @@ import {
 import { UserData } from './data/users';
 import { UserService } from './mock/users.service';
 import { MockDataModule } from './mock/mock-data.module';
-
-const socialLinks = [
-  {
-    url: 'https://github.com/akveo/nebular',
-    target: '_blank',
-    icon: 'socicon-github',
-  },
-  {
-    url: 'https://www.facebook.com/akveo/',
-    target: '_blank',
-    icon: 'socicon-facebook',
-  },
-  {
-    url: 'https://twitter.com/akveo_inc',
-    target: '_blank',
-    icon: 'socicon-twitter',
-  },
-];
+import { map } from 'rxjs/operators';
 
 const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
 ];
 
+@Injectable()
 export class NbSimpleRoleProvider extends NbRoleProvider {
-  getRole() {
-    // here you could provide any role based on any auth flow
-    return observableOf('guest');
+
+  constructor (private authService: NbAuthService) {
+    super();
+  }
+
+  getRole(): Observable<string> {
+    return this.authService.onTokenChange()
+      .pipe(
+        map((token: NbAuthJWTToken) => {
+          console.debug('logged as role: ' + token.getPayload()['permissions']);
+          return token.isValid() && !!token.getPayload()['permissions'] ? token.getPayload()['permissions'] : 'norole';
+        }),
+      );
   }
 }
 
@@ -46,37 +40,42 @@ export const NB_CORE_PROVIDERS = [
   ...MockDataModule.forRoot().providers,
   ...DATA_SERVICES,
   ...NbAuthModule.forRoot({
-
     strategies: [
-      NbDummyAuthStrategy.setup({
+      NbPasswordAuthStrategy.setup({
         name: 'email',
-        delay: 3000,
+        token: {
+          class: NbAuthJWTToken,
+          key: 'token',
+        },
+        baseEndpoint: 'http://localhost:8090',
+        login: {
+          endpoint: '/login',
+          method: 'post',
+        },
       }),
     ],
-    forms: {
-      login: {
-        socialLinks: socialLinks,
-      },
-      register: {
-        socialLinks: socialLinks,
-      },
-    },
+    forms: {},
   }).providers,
 
   NbSecurityModule.forRoot({
     accessControl: {
-      guest: {
-        view: '*',
+      norole: {
+        view: '',
+        insert: '',
+        remove: '',
       },
-      user: {
-        parent: 'guest',
-        create: '*',
-        edit: '*',
+      standard: {
+        view: ['trips', 'fleet', 'incidences'],
+        insert: ['trips', 'incidences'],
+        remove: ['trips', 'incidences'],
+      },
+      admin: {
+        view: '*',
+        insert: '*',
         remove: '*',
       },
     },
   }).providers,
-
   {
     provide: NbRoleProvider, useClass: NbSimpleRoleProvider,
   },

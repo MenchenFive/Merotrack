@@ -1,5 +1,6 @@
 package merotracker.security;
 
+import merotracker.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,9 +22,11 @@ import static merotracker.security.Constants.LOGIN_URL;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	private UserDetailsService userDetailsService;
+	private UserRepository repo;
 
-	public WebSecurity(UserDetailsService userDetailsService) {
+	public WebSecurity(UserDetailsService userDetailsService, UserRepository repo) {
 		this.userDetailsService = userDetailsService;
+		this.repo = repo;
 	}
 
 	@Bean
@@ -37,10 +40,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() 	// No cookies
 			.cors().and()																		// Enabled, default CORS
 			.csrf().disable()																	// Disabled CSRF Filter
-			.authorizeRequests().antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()// Login URL doesnt need auth
-				.antMatchers(HttpMethod.POST,"/users").permitAll()
-			.anyRequest().authenticated().and()													// Rest of URLS in API require auth
-				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+			.authorizeRequests().antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()			// Login and arduino URL doesnt need auth
+				.antMatchers(HttpMethod.GET,"/vehiclePositions/arduino").permitAll()
+				.anyRequest().authenticated().and()													// Rest of URLS in API require auth
+				.addFilter(new JWTAuthenticationFilter(authenticationManager(), repo ))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager()));
 	}
 

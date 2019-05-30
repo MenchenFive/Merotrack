@@ -54,7 +54,6 @@ export class MaproutingdialogComponent implements OnInit {
         let stage = this.item.stages[i];
         this.waypoints.push(L.latLng(stage.lat, stage.lon));
       }
-      console.debug(this.waypoints);
     }
   }
 

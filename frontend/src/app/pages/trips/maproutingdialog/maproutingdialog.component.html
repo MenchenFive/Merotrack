@@ -30,8 +30,8 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton (click)="onSubmit($event)">Guardar</button>
-      <button nbButton (click)="onOptimize($event)">Optimizar Ruta</button>
+      <button nbButton (click)="onSubmit($event)" [shape]="'rectangle'">Guardar</button>
+      <button nbButton (click)="onOptimize($event)" [shape]="'rectangle'" class="ml-3">Optimizar Ruta</button>
     </nb-card-footer>
   </nb-card>
   <nb-datepicker #pickerStart></nb-datepicker>

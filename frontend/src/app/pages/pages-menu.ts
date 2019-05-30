@@ -6,21 +6,37 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-location',
     link: '/pages/maps',
     home: true,
+    data: {
+      permission: 'view',
+      resource: 'maps',
+    },
   },
   {
     title: 'Viajes',
     icon: 'nb-angle-double-right',
     link: '/pages/trips',
+    data: {
+      permission: 'view',
+      resource: 'trips',
+    },
   },
   {
     title: 'Flota',
     icon: 'fas fa-truck fa-2x',
     link: '/pages/vehicles',
+    data: {
+      permission: 'view',
+      resource: 'fleet',
+    },
   },
   {
     title: 'Incidencias',
     icon: 'nb-alert',
     link: '/pages/incidences',
+    data: {
+      permission: 'view',
+      resource: 'incidences',
+    },
   },
   /*{
     title: 'Direcciones',
@@ -32,6 +48,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Usuarios',
     icon: 'nb-person',
     link: '/pages/users',
+    data: {
+      permission: 'view',
+      resource: 'users',
+    },
   },
   /*{
     title: 'FEATURES',

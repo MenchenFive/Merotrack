@@ -8,10 +8,12 @@ import { IncidenceTableComponent } from './incidences/incidencetable.component';
 import { TripTableComponent } from './trips/triptable.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AddressTableComponent } from './address/addresstable.component';
+import { AuthGuard } from '../auth-guard.service';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
+  canActivate: [AuthGuard],
   children: [
     {
       path: 'vehicles',
@@ -22,7 +24,7 @@ const routes: Routes = [{
       component: MapsComponent,
     },
     {
-      path: 'address',
+      path: 'users',
       component: AddressTableComponent,
     },
     {
@@ -36,8 +38,12 @@ const routes: Routes = [{
     {
       path: '',
       pathMatch: 'full',
-      component: NotFoundComponent,
+      component: MapsComponent,
     },
+    {
+      path: '**',
+      component: NotFoundComponent,
+    }
   ],
 }];
 
