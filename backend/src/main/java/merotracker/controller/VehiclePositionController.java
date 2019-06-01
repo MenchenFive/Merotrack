@@ -142,6 +142,7 @@ public class VehiclePositionController {
             @RequestParam("vehicleId")    Integer vehicleId
     ) {
 
+        dateEnd = new Date(dateEnd.getTime() + 86_400_000);
         List<VehiclePosition> found = repository.findAllByVehicleIdAndDateBetween(vehicleId, dateStart, dateEnd);
 
         List<Resource<VehiclePositionProjection.full>> resources = new ArrayList<>();
