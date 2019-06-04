@@ -11,6 +11,7 @@ export class SpringDataSource extends ServerDataSource {
       dataKey:          string,
       totalKey:         string,
       private filterPathKey:    string,
+      private projectionKey?:    string,
     ) {
       super(http, {
         endPoint:       endPoint,
@@ -60,6 +61,16 @@ export class SpringDataSource extends ServerDataSource {
       return httpParams;
     }
 
+    //adds projectionParams
+    protected addProjectionParam(httpParams: HttpParams): HttpParams {
+      console.debug('ping');
+      var _this = this;
+      if (!!this.filterConf.projectionKey) {
+        httpParams = httpParams.set('projection', this.projectionKey );
+      }
+      return httpParams;
+    }
+
     protected requestElements(): Observable<any> {
       var httpParams = this.createRequesParams();
       return this.http.get(
@@ -77,6 +88,14 @@ export class SpringDataSource extends ServerDataSource {
         }
         return [];
         throw new Error("Data must be an array.\n    Please check that data extracted from the server response by the key '" + this.conf.dataKey + "' exists and is array.");
+    }
+
+    protected createRequesParams(): HttpParams {
+      var httpParams = new HttpParams();
+      httpParams = this.addSortRequestParams(httpParams);
+      httpParams = this.addFilterRequestParams(httpParams);
+      httpParams = this.addProjectionParam(httpParams);
+      return this.addPagerRequestParams(httpParams);
     }
 
 }
