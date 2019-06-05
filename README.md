@@ -5,6 +5,22 @@ Alberto Menchén Ruiz
 
 [DEMO VIDEO](https://drive.google.com/file/d/1-AHN0oYK-R7Ww952cVysdSEwwJiVyqIa/view?usp=sharing)
 
+# How to run:
+### Backend:
+  - Import backend folder as a Java project into a Gradle-compatible IDE (IntelliJ IDEA, Eclipse, ...)
+  - Run main() method at MerotrackerApplication.java
+  - NOTE: You will need a DBMS, like PostgreSQL, and you will need to configure Application.properties file with the DB access credentials and URL.
+
+### Frontend:
+  - Install Node.js, and therefore, NPM
+  - In terminal, move to 'Frontend' directory
+  - Run following commands:
+```sh
+npm i --save 
+ng serve
+```
+
+
 # Technology stack:
 ### Backend:
 - Java
