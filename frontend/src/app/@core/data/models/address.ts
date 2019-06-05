@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { RestService, Resource } from 'angular4-hal';
 import { HttpClient } from '@angular/common/http';
-import { SpringDataSource } from '../../SpringDataSource';
+import { SpringDataSource } from 'spring-table-source';
+
 
 
 const urlRoute = 'adresses';

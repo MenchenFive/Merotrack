@@ -86,6 +86,7 @@
     "rxjs": "6.4.0",
     "rxjs-compat": "6.3.0",
     "socicon": "3.0.5",
+    "spring-table-source": "^0.1.0",
     "tinymce": "4.5.7",
     "tslib": "^1.9.0",
     "typeface-exo": "0.0.22",

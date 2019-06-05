@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { getDeepFromObject } from 'ng2-smart-table/lib/helpers';
 
-export class SpringDataSource extends ServerDataSource {
+/*export abstract class SpringDataSource extends ServerDataSource {
 
     constructor(
       http: HttpClient,
@@ -99,3 +99,4 @@ export class SpringDataSource extends ServerDataSource {
     }
 
 }
+*/

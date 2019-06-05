@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { RestService, Resource } from 'angular4-hal';
 import { HttpClient } from '@angular/common/http';
-import { SpringDataSource } from '../../SpringDataSource';
-import { ExternalConfigurationService } from '../../../ExternalConfigurationService';
+import { SpringDataSource } from 'spring-table-source';
+
 
 const urlRoute = 'users';
 
@@ -16,14 +16,11 @@ export class User extends Resource {
     public password?:           string,
     public salt?:           string,
     public role?:              string,
-  )
-  { super(); }
+  ) { super(); }
 
   public static newNull(): User {
-    return new User(null,null,null,null,null,null);
+    return new User(null, null, null, null, null, null);
   }
-
-
 
 }
 
